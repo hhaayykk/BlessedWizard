@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lucky Wizard</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Подключаем Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div id="dimmedOverlay" class="dimmed-overlay"></div>
+    <div id="resultOverlay" class="result-overlay">
+        <span id="resultText" class="result-text"></span>
+    </div>
+
+    <div id="gameContainer" class="casino-container">
+        <div class="page-header">
+            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalance">⭐ 0 Stars</div>
+        </div>
+        <div class="info-panel">
+            <div class="info-box">
+                <h3>Bet</h3>
+                <div class="value" id="betLevel">1</div>
+            </div>
+            <div class="info-box">
+                <h3>Star Value</h3>
+                <div class="value" id="coinValue">1.00</div>
+            </div>
+            <div class="info-box">
+                <h3>Total Bet</h3>
+                <div class="value" id="totalBet">20.00</div>
+            </div>
+        </div>
+        <img src="images/valshebnik.png" class="character-image">
+        <div class="slot-machine">
+            <div class="slot-frame">
+                <div class="reel-container"><div class="reel" id="reel1"></div></div>
+                <div class="reel-container"><div class="reel" id="reel2"></div></div>
+                <div class="reel-container"><div class="reel" id="reel3"></div></div>
+                <div class="reel-container"><div class="reel" id="reel4"></div></div>
+                <div class="reel-container"><div class="reel" id="reel5"></div></div>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="right-controls">
+                <button class="paytable-button" id="paytableButton">Paytable</button>
+            </div>
+            <div class="left-controls">
+                <button class="control-button bet-settings-button" id="betSettingsButton">Bet</button>
+                <button class="control-button auto-button" id="autoButton">Auto</button>
+            </div>
+            <button class="spin-button" id="spinButton"></button>
+        </div>
+        <div id="betSettingsModal" class="bet-settings-modal">
+            <div class="bet-settings-row">
+                <div class="bet-settings-label">Bet (Stars/Line)</div>
+                <div class="adjust-group">
+                    <button class="bet-adjust-button" id="decreaseBetLevel">−</button>
+                    <div class="bet-settings-value" id="betLevelModal">1</div>
+                    <button class="bet-adjust-button" id="increaseBetLevel">+</button>
+                </div>
+            </div>
+            <div class="bet-settings-row">
+                <div class="bet-settings-label">Star Value</div>
+                <div class="adjust-group">
+                    <button class="bet-adjust-button" id="decreaseCoinValue">−</button>
+                    <div class="bet-settings-value" id="coinValueModal">1.00</div>
+                    <button class="bet-adjust-button" id="increaseCoinValue">+</button>
+                </div>
+            </div>
+            <div class="bet-settings-row">
+                <div class="bet-settings-label">Total Bet</div>
+                <div class="bet-settings-value" id="totalBetModal">20.00</div>
+                <button class="bet-adjust-button max-bet-button" id="maxBetButton">Max</button>
+            </div>
+            <button class="ok-button" id="okButton">OK</button>
+        </div>
+        <div id="autoSettingsModal" class="auto-settings-modal">
+            <button class="toggle-auto-spin" id="toggleAutoSpin">Enable Auto Spin</button>
+            <div class="bet-settings-row disabled-setting" id="autoSpinsRow">
+                <div class="bet-settings-label">Auto Spins</div>
+                <div class="bet-settings-value" id="autoSpinsModal">5</div>
+                <button class="bet-adjust-button" id="decreaseAutoSpins">−</button>
+                <button class="bet-adjust-button" id="increaseAutoSpins">+</button>
+            </div>
+            <div class="bet-settings-row disabled-setting" id="quickSpinRow">
+                <div class="bet-settings-label">Quick Spin</div>
+                <input type="checkbox" id="quickSpinCheckbox">
+            </div>
+            <button class="ok-button" id="okAutoButton">CANCEL</button>
+        </div>
+        <div id="paytableModal" class="paytable-modal">
+            <div class="paytable-content">
+                <h3>Paytable</h3>
+                <p>Wins are calculated across 20 paylines. Match 3, 4, or 5 symbols from the left reel.</p>
+                <div class="paytable-item">
+                    <img src="images/avelavokmagic.PNG">
+                    <span>Loop: 5x - 37.5, 4x - 7.5, 3x - 3.75</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/ballmagic.png">
+                    <span>Magic Ball: 5x - 25.0, 4x - 5.0, 3x - 2.5</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/bookmagic.png">
+                    <span>Book: 5x - 20.0, 4x - 4.0, 3x - 2.0</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/hatmagic.png">
+                    <span>Hat: 5x - 15.0, 4x - 3.0, 3x - 1.5</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/lightermagic.PNG">
+                    <span>Lighter: 5x - 10.0, 4x - 2.0, 3x - 1.0</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/notemagic.png">
+                    <span>Note: 5x - 7.5, 4x - 1.5, 3x - 0.75</span>
+                </div>
+                <div class="paytable-item">
+                    <img src="images/poisonmagic.png">
+                    <span>Poison: 5x - 5.0, 4x - 1.0, 3x - 0.5</span>
+                </div>
+                <p>Total Win = (Bet per line × Symbol Multiplier) × Number of lines.</p>
+            </div>
+            <button class="ok-button" id="okPaytableButton">OK</button>
+        </div>
+    </div>
+
+    <div id="leadersContainer" class="leaders-container" style="display: none;">
+        <div class="page-header">
+            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalanceLeaders">⭐ 0 Stars</div>
+        </div>
+        <div class="leaderboard-header">
+            <h3 class="leaderboard-title">Leaderboard</h3>
+            <div class="leaderboard-subtitle">September 2025</div>
+        </div>
+        <div class="leaderboard-podium">
+            <div class="podium-item podium-second">
+                <div class="podium-rank">🥈</div>
+                <img src="images/Arabic.jpg" class="podium-avatar">
+                <div class="podium-name">الأحمد</div>
+                <div class="podium-score">⭐ 750 000</div>
+                <div class="podium-base podium-base-second">2</div>
+            </div>
+            <div class="podium-item podium-first">
+                <div class="podium-rank">🥇</div>
+                <img src="images/David.png" class="podium-avatar podium-avatar-winner">
+                <div class="podium-name">David</div>
+                <div class="podium-score">⭐ 1 250 000</div>
+                <div class="podium-base podium-base-first">1</div>
+            </div>
+            <div class="podium-item podium-third">
+                <div class="podium-rank">🥉</div>
+                <div class="podium-avatar">A</div>
+                <div class="podium-name">A</div>
+                <div class="podium-score">⭐ 500 000</div>
+                <div class="podium-base podium-base-third">3</div>
+            </div>
+        </div>
+        <div class="leaderboard-list">
+            <div class="leaderboard-item">
+                <div class="leaderboard-position">4</div>
+                <div class="leaderboard-avatar">V</div>
+                <div class="leaderboard-player">
+                    <div class="leaderboard-name">Vladimir</div>
+                    <div class="leaderboard-score">⭐ 300 000</div>
+                </div>
+            </div>
+            <div class="leaderboard-item">
+                <div class="leaderboard-position">5</div>
+                <img src="images/Gold.jpg" class="leaderboard-avatar">
+                <div class="leaderboard-player">
+                    <div class="leaderboard-name">Golddd</div>
+                    <div class="leaderboard-score">⭐ 200 000</div>
+                </div>
+            </div>
+        </div>
+        <div class="leaderboard-info">
+            <i class="fas fa-info-circle"></i>
+            <p>Leaderboard shows the top 5 players with the most spins last month. It resets monthly, and rewards are credited to your balance.</p>
+        </div>
+    </div>
+
+    <div id="balanceContainer" class="balance-container" style="display: none;">
+        <div class="page-header">
+            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalanceWallet">⭐ 0 Stars</div>
+        </div>
+        <div class="wallet-divider"></div>
+        <div class="deposit-withdraw-row">
+            <button class="deposit-btn active" id="depositButton">Deposit</button>
+            <button class="withdraw-btn" id="withdrawButton">Withdraw</button>
+        </div>
+        <!-- Content will be dynamically loaded -->
+    </div>
+
+    <div id="friendsContainer" class="friends-container" style="display: none;">
+        <div class="page-header">
+            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalanceFriends">⭐ 0 Stars</div>
+        </div>
+        <div class="referral-header">
+            <h3 class="referral-title">Invite Friends</h3>
+            <div class="referral-subtitle">Earn 5 Stars per friend!</div>
+        </div>
+        <div class="referral-stats">
+            <div class="referral-stat-box">
+                <div class="stat-number" id="friendsInvited">0</div>
+                <div class="stat-label">Friends Invited</div>
+            </div>
+            <div class="referral-stat-box">
+                <div class="stat-number" id="totalEarned"><span style="font-size: 15px;">⭐</span> 0</div>
+                <div class="stat-label">Total Earned</div>
+            </div>
+        </div>
+        <div class="referral-link-section">
+            <div class="referral-link-title">Your Referral Link</div>
+            <div class="referral-link-container">
+                <span class="referral-link-text" id="referralLink">https://t.me/kazikkkbot?start=ref_USER123</span>
+                <i class="fa-solid fa-copy copy-icon" onclick="window.copyText(this, document.getElementById('referralLink').textContent)"></i>
+            </div>
+        </div>
+        <button class="share-button" id="shareButton"><i class="fas fa-share"></i> Share Link</button>
+        <div class="referral-info-box">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <div class="referral-info-title">How it works:</div>
+                <ul class="referral-info-list">
+                    <li>Share your unique referral link</li>
+                    <li>Friend registers using your link</li>
+                    <li>You get 5 Stars instantly!</li>
+                    <li>No limit on referrals</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="profileContainer" class="profile-container" style="display: none;">
+        <div class="page-header">
+            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalanceProfile">⭐ 0 Stars</div>
+        </div>
+        <div class="profile-header">
+            <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
+            <div class="profile-info">
+                <h3 id="profileName">User Name</h3>
+                <p id="telegramId">Telegram ID: Not Set</p>
+                <p id="registrationDate">Registered: Not Set</p>
+            </div>
+        </div>
+        <div class="language-selector">
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </div>
+        <a href="#" class="privacy-policy">Privacy Policy</a>
+        <div class="footer">
+            <p>18+ only | Play responsibly | Terms apply</p>
+            <p>Email: support@royalslots.com</p>
+            <p>Telegram: t.me/ll_li_llll</p>
+            <img src="images/responsible_gaming.png">
+        </div>
+    </div>
+
+    <div class="telegram-nav">
+        <button class="telegram-nav-button" id="leadersButton"><i class="fas fa-trophy"></i> Leaders</button>
+        <button class="telegram-nav-button" id="walletButton"><i class="fas fa-wallet"></i> Wallet</button>
+        <button class="telegram-nav-button active" id="playButton"><i class="fas fa-play"></i> Play</button>
+        <button class="telegram-nav-button" id="friendsButton"><i class="fas fa-users"></i> Referrals</button>
+        <button class="telegram-nav-button" id="profileButton"><i class="fas fa-user"></i> Profile</button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
