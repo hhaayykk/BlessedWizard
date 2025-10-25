@@ -156,6 +156,11 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
 }
 
 .symbol {
@@ -838,6 +843,7 @@ body {
     box-shadow: 0 4px 15px rgba(159, 54, 241, 0.2);
 }
 
+
 .stat-number {
     font-family: 'Cinzel', serif;
     font-size: 1.8em;
@@ -1063,7 +1069,7 @@ body {
 }
 
 .currency-section {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .currency-title {
@@ -1167,7 +1173,7 @@ body {
     border: 1px solid #f0c05a;
     font-size: 0.8em;
     color: #e0e0ff;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
 }
 
 .withdrawal-input:focus {
@@ -1179,6 +1185,7 @@ body {
     color: #ff4d4d;
     font-size: 0.7em;
     margin-top: 2px;
+    margin-bottom: 6px;
     min-height: 1em;
     text-align: center;
 }
@@ -1186,13 +1193,15 @@ body {
 .max-button {
     background: #0d0e12;
     color: #f0c05a;
-    padding: 6px 12px;
-    font-size: 0.8em;
+    padding: 2px 10px;
+    height: 35px;
+    font-size: 0.85em;
     font-weight: 500;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease, transform 0.2s ease;
+    margin-top: 1px; /* Added margin to move the button down */
 }
 
 .max-button:hover {
@@ -1246,7 +1255,7 @@ body {
     border: 1px solid rgba(159, 54, 241, 0.4);
     border-radius: 10px;
     padding: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -1585,6 +1594,151 @@ body {
     text-align: center;
 }
 
+/* Add these styles to your style.css file */
+
+.profile-section {
+    background: rgba(28, 17, 41, 0.6);
+    border: 1px solid rgba(240, 192, 90, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.profile-setting-row {
+    display: flex;
+    align-items: center;
+    gap: 55px;
+}
+
+.setting-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2em; /* already bigger */
+    color: #e0e0ff;
+    white-space: nowrap; /* prevents line breaks */
+}
+
+
+
+.setting-label i {
+    color: #f0c05a;
+    font-size: 1em;
+}
+
+.music-toggle-btn {
+    width: 80px;
+    font-size: 1.2em;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.music-toggle-btn .music-status {
+    display: block;
+}
+
+.music-toggle-btn i {
+    margin: 0;
+}
+
+.music-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #1c1129, #2a1b3e);
+    border: 2px solid #f0c05a;
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #e0e0ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 65px;
+}
+
+.music-toggle-btn i {
+    font-size: 1.1em;
+    color: #f0c05a;
+    transition: all 0.3s ease;
+}
+
+.music-toggle-btn.active {
+    background: linear-gradient(135deg, #9f36f1, #7b2cbf);
+    border-color: #9f36f1;
+    box-shadow: 0 0 15px rgba(159, 54, 241, 0.4);
+}
+
+.music-toggle-btn.active i {
+    color: #f0c05a;
+    animation: music-pulse 1.5s ease-in-out infinite;
+}
+
+.music-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(159, 54, 241, 0.3);
+}
+
+.music-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.music-status {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+@keyframes music-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+    .profile-section {
+        padding: 12px;
+    }
+    
+    .profile-setting-row {
+        gap: 10px;
+    }
+    
+    .setting-label {
+        font-size: 0.85em;
+    }
+    
+    .music-toggle-btn {
+        padding: 6px 12px;
+        font-size: 0.75em;
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 320px) {
+    .profile-section {
+        padding: 10px;
+    }
+    
+    .setting-label {
+        font-size: 0.8em;
+    }
+    
+    .music-toggle-btn {
+        padding: 5px 10px;
+        font-size: 0.7em;
+        min-width: 75px;
+    }
+}
+
 .language-selector select {
     background: #0d0e12;
     color: #e0e0ff;
@@ -1592,8 +1746,6 @@ body {
     border: 1px solid #f0c05a;
     border-radius: 8px;
     font-size: 0.8em;
-    width: 100%;
-    max-width: 200px;
     cursor: pointer;
     margin: 10px auto;
     display: block;

@@ -243,33 +243,47 @@
         </div>
     </div>
 
-    <div id="profileContainer" class="profile-container" style="display: none;">
-        <div class="page-header">
-            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalanceProfile">⭐ 0 Stars</div>
-        </div>
-        <div class="profile-header">
-            <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
-            <div class="profile-info">
-                <h3 id="profileName">User Name</h3>
-                <p id="telegramId">Telegram ID: Not Set</p>
-                <p id="registrationDate">Registered: Not Set</p>
-            </div>
-        </div>
-        <div class="language-selector">
-            <select id="languageSelect">
-                <option value="en">English</option>
-                <option value="ru">Русский</option>
-            </select>
-        </div>
-        <a href="#" class="privacy-policy">Privacy Policy</a>
-        <div class="footer">
-            <p>18+ only | Play responsibly | Terms apply</p>
-            <p>Email: support@royalslots.com</p>
-            <p>Telegram: t.me/ll_li_llll</p>
-            <img src="images/responsible_gaming.png">
+<!-- Add this updated profile container to replace the existing one in your HTML -->
+<div id="profileContainer" class="profile-container" style="display: none;">
+    <div class="page-header">
+        <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+        <div class="wallet-balance" id="currentBalanceProfile">⭐ 0 Stars</div>
+    </div>
+    <div class="profile-header">
+        <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
+        <div class="profile-info">
+            <h3 id="profileName">User Name</h3>
+            <p id="telegramId">Telegram ID: Not Set</p>
+            <p id="registrationDate">Registered: Not Set</p>
         </div>
     </div>
+    
+    <!-- Music Toggle Section -->
+    <div class="profile-section">
+        <div class="profile-setting-row">
+            <div class="setting-label">
+                <i class="fas fa-music"></i>
+                <span>Background Music</span>
+            </div>
+            <button class="music-toggle-btn active" id="musicToggle">
+                <span class="music-status">ON</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">English</option>
+        </select>
+    </div>
+    <a href="#" class="privacy-policy">Privacy Policy</a>
+    <div class="footer">
+        <p>18+ only | Play responsibly | Terms apply</p>
+        <p>Email: support@royalslots.com</p>
+        <p>Telegram: t.me/ll_li_llll</p>
+        <img src="images/responsible_gaming.png">
+    </div>
+</div>
 
     <div class="telegram-nav">
         <button class="telegram-nav-button" id="leadersButton"><i class="fas fa-trophy"></i> Leaders</button>
