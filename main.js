@@ -1021,7 +1021,7 @@ function loadDeposit() {
     balanceContainer.innerHTML = `
         <div class="page-header">
             <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)} Stars</div>
+            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)}</div>
         </div>
         <div class="wallet-divider"></div>
         <div class="deposit-withdraw-row">
@@ -1111,8 +1111,8 @@ function loadWithdraw() {
     
     balanceContainer.innerHTML = `
         <div class="page-header">
-            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)} Stars</div>
+            <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)}</div>
         </div>
         <div class="wallet-divider"></div>
         <div class="deposit-withdraw-row">

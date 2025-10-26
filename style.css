@@ -79,13 +79,14 @@ h2 {
 }
 
 .page-header .wallet-balance {
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: 400;
     margin-right: 5px;
     color: #e0e0ff;
     display: flex;
     align-items: center;
     gap: 7px;
+    text-align: right;
 }
 
 .character-image {
@@ -248,7 +249,6 @@ h2 {
 .left-controls,
 .right-controls,
 .centerright {
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -263,11 +263,9 @@ h2 {
     width: 100%;
     flex-grow: 1;
 }
-.centerright {
-
-}
 .spin-button {
     width: 100%;
+    min-width: 80px;
     height: 80px;
     border-radius: 500px;
     border: 3px solid #722B83;
@@ -1862,6 +1860,12 @@ h2 {
     filter: drop-shadow(0 0 5px rgba(159, 54, 241, 0.3));
 }
 
+.btnCombo {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
 @media (max-width: 360px) {
     body {
         padding: calc(10px + env(safe-area-inset-top)) 8px calc(70px + env(safe-area-inset-bottom));
@@ -1890,9 +1894,9 @@ h2 {
         height: 1.2em;
     } */
 
-    .page-header .wallet-balance {
+    /* .page-header .wallet-balance {
         font-size: 0.85em;
-    }
+    } */
 
     .character-image, .footer img {
         max-height: 80px;
@@ -2077,9 +2081,9 @@ h2 {
         height: 1.1em;
     } */
 
-    .page-header .wallet-balance {
+    /* .page-header .wallet-balance {
         font-size: 0.75em;
-    }
+    } */
 
     .character-image, .footer img {
         max-height: 70px;
