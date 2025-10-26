@@ -1019,10 +1019,6 @@ async function creditStarsBalance(stars) {
 
 function loadDeposit() {
     balanceContainer.innerHTML = `
-        <div class="page-header">
-            <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)}</div>
-        </div>
         <div class="wallet-divider"></div>
         <div class="deposit-withdraw-row">
             <button class="deposit-btn active" id="depositButton">Deposit</button>
@@ -1110,10 +1106,6 @@ function loadWithdraw() {
     const timeRemaining = canWithdraw ? "" : getTimeRemainingFormatted();
     
     balanceContainer.innerHTML = `
-        <div class="page-header">
-            <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)}</div>
-        </div>
         <div class="wallet-divider"></div>
         <div class="deposit-withdraw-row">
             <button class="deposit-btn" id="depositButton">Deposit</button>
