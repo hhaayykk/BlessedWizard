@@ -1560,7 +1560,7 @@ function initBackgroundMusic() {
     console.log('🎵 Initializing background music...');
     
     // Try multiple audio formats in case .mp4 doesn't work
-    backgroundMusic = new Audio('spooky.mp4');
+    backgroundMusic = new Audio('spooky.m4a');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
     backgroundMusic.preload = 'auto';
@@ -1568,8 +1568,8 @@ function initBackgroundMusic() {
     // Add error handler
     backgroundMusic.addEventListener('error', (e) => {
         console.error('❌ Music file error:', e);
-        console.error('❌ Failed to load: spooky.mp4');
-        showError('Music file not found. Check spooky.mp4');
+        console.error('❌ Failed to load: spooky.m4a');
+        showError('Music file not found. Check spooky.m4a');
     });
     
     backgroundMusic.addEventListener('canplaythrough', () => {
