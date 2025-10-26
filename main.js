@@ -58,8 +58,8 @@ let telegramId = null;
 
 const MIN_WITHDRAW = 2000;
 const TRANSACTION_COOLDOWN = 6 * 60 * 60 * 1000;
-const REFERRAL_BONUS_REFERRER = 5.0;
-const REFERRAL_BONUS_NEW_USER = 5.0;
+const REFERRAL_BONUS_REFERRER = 15.0;
+const REFERRAL_BONUS_NEW_USER = 15.0;
 const BOT_USERNAME = "kazikkkbot";
 
 // Background Music
