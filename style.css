@@ -20,7 +20,7 @@ body {
     touch-action: pan-x pan-y;
 }
 h2 {
-    color: gold;
+    color: #f0c05a;
 }
 .dimmed-overlay {
     position: fixed;
@@ -110,13 +110,13 @@ h2 {
     padding: 8px;
     border-radius: 8px;
     text-align: center;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
 }
 
 .info-box h3 {
     font-family: 'Cinzel', serif;
     font-size: 0.8em;
-    color: gold;
+    color: #f0c05a;
     text-transform: uppercase;
     margin-bottom: 2px;
 }
@@ -131,7 +131,7 @@ h2 {
     background: #1c1129;
     border-radius: 12px;
     padding: 10px;
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     box-shadow: 0 0 15px rgba(159, 54, 241, 0.2);
 }
 
@@ -185,12 +185,12 @@ h2 {
 }
 
 .symbol.win {
-    background: linear-gradient(45deg, gold, #9f36f1);
+    background: linear-gradient(45deg, #f0c05a, #9f36f1);
     animation: glow 1s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
-    from { box-shadow: 0 0 5px gold; }
+    from { box-shadow: 0 0 5px #f0c05a; }
     to { box-shadow: 0 0 15px #9f36f1; }
 }
 
@@ -220,14 +220,14 @@ h2 {
     font-weight: 700;
     padding: 10px 20px;
     border-radius: 8px;
-    background: gold;
+    background: #f0c05a;
     color: #0d0e12;
     border: 1px solid #9f36f1;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 .result-text.win-message {
-    background: gold;
+    background: #f0c05a;
     color: #0d0e12;
 }
 
@@ -282,7 +282,7 @@ h2 {
 .spin-button svg {
     width: 50px;
     height: 50px;
-    color: gold;
+    color: #f0c05a;
 }
 
 .spin-button:hover {
@@ -346,13 +346,16 @@ h2 {
     border: 3px solid #722B83;
     background: linear-gradient(0deg,rgba(65, 18, 86, 1) 0%, rgba(80, 23, 104, 1) 100%);
     border-radius: 5px;
-    color: gold;
+    color: #f0c05a;
     display: flex;
     justify-content: center;
     height: 36px;
     padding: 0 20px;
-} .button svg { margin-right: 5px; width: 20px; color: gold;}
- .button svg path { color: gold;}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} .button svg { margin-right: 5px; width: 20px; color: #f0c05a;}
+ .button svg path { color: #f0c05a;}
 .controls {
     display: flex;
     align-items: center;
@@ -403,12 +406,12 @@ h2 {
     font-family: 'Cinzel', serif;
     font-size: 1.2em;
     font-weight: 700;
-    border: 3px solid gold;
+    border: 3px solid #f0c05a;
     background: #1C1129;
     border-radius: 13px;
-    color: gold;
-} .button svg { margin-right: 5px; width: 20px; color: gold;}
- .button svg path { color: gold;}
+    color: #f0c05a;
+} .button svg { margin-right: 5px; width: 20px; color: #f0c05a;}
+ .button svg path { color: #f0c05a;}
 
 .bet-settings-modal, .auto-settings-modal, .paytable-modal {
     position: fixed;
@@ -418,7 +421,7 @@ h2 {
     background: #1c1129;
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     display: none;
     z-index: 100;
     width: 80%;
@@ -439,7 +442,7 @@ h2 {
 .bet-settings-label {
     font-family: 'Cinzel', serif;
     font-size: 0.8em;
-    color: gold;
+    color: #f0c05a;
 }
 
 .bet-settings-value {
@@ -480,7 +483,7 @@ h2 {
 
 .max-bet-button {
     background: #0d0e12;
-    color: gold;
+    color: #f0c05a;
     padding: 5px 10px;
     font-size: 0.75em;
     font-weight: 500;
@@ -548,7 +551,7 @@ h2 {
 }
 
 .toggle-auto-spin.active {
-    background: gold;
+    background: #f0c05a;
     color: #0d0e12;
 }
 
@@ -577,14 +580,14 @@ h2 {
 }
 
 .paytable-content::-webkit-scrollbar-thumb {
-    background: gold;
+    background: #f0c05a;
     border-radius: 3px;
 }
 
 .paytable-content h3 {
     font-family: 'Cinzel', serif;
     font-size: 1em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 10px;
     text-align: center;
 }
@@ -621,7 +624,7 @@ h2 {
 
 .leaderboard-trophy {
     font-size: 2.5em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 10px;
     filter: drop-shadow(0 0 10px rgba(240, 192, 90, 0.5));
 }
@@ -629,7 +632,7 @@ h2 {
 .leaderboard-title {
     font-family: 'Cinzel', serif;
     font-size: 1.5em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 5px;
     font-weight: 700;
 }
@@ -674,7 +677,7 @@ h2 {
     font-size: 1em;
     color: #fff;
     margin-bottom: 8px;
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     box-shadow: 0 4px 10px rgba(159, 54, 241, 0.3);
 }
 
@@ -701,7 +704,7 @@ h2 {
 
 .podium-score {
     font-size: 0.7em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -726,13 +729,13 @@ h2 {
     font-size: 1.2em;
     font-weight: 700;
     color: #fff;
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     border-bottom: none;
 }
 
 .podium-base-first {
     height: 80px;
-    background: linear-gradient(180deg, gold, #d4a849);
+    background: linear-gradient(180deg, #f0c05a, #d4a849);
 }
 
 .podium-base-second {
@@ -781,7 +784,7 @@ h2 {
     font-family: 'Cinzel', serif;
     font-size: 1em;
     font-weight: 700;
-    color: gold;
+    color: #f0c05a;
     min-width: 25px;
     text-align: center;
 }
@@ -805,7 +808,7 @@ h2 {
     font-weight: 700;
     font-size: 0.75em;
     color: #fff;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
 }
 
 .leaderboard-name {
@@ -816,7 +819,7 @@ h2 {
 
 .leaderboard-score {
     font-size: 0.8em;
-    color: gold;
+    color: #f0c05a;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -856,7 +859,7 @@ h2 {
 
 .referral-gift-icon {
     font-size: 2.5em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 10px;
     filter: drop-shadow(0 0 10px rgba(240, 192, 90, 0.5));
 }
@@ -864,7 +867,7 @@ h2 {
 .referral-title {
     font-family: 'Cinzel', serif;
     font-size: 1.5em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 5px;
     font-weight: 700;
 }
@@ -896,7 +899,7 @@ h2 {
 .stat-number {
     font-family: 'Cinzel', serif;
     font-size: 1.8em;
-    color: gold;
+    color: #f0c05a;
     font-weight: 700;
     margin-bottom: 5px;
     display: flex;
@@ -918,7 +921,7 @@ h2 {
 .referral-link-title {
     font-family: 'Cinzel', serif;
     font-size: 0.85em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 8px;
     text-align: center;
 }
@@ -966,7 +969,7 @@ h2 {
 
 .share-button i {
     font-size: 1.2em;
-    color: gold;
+    color: #f0c05a;
 }
 
 .share-button:hover {
@@ -999,7 +1002,7 @@ h2 {
 .referral-info-title {
     font-family: 'Cinzel', serif;
     font-size: 0.85em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 8px;
     font-weight: 700;
 }
@@ -1023,7 +1026,7 @@ h2 {
     content: "✓";
     position: absolute;
     left: 0;
-    color: gold;
+    color: #f0c05a;
     font-weight: 700;
 }
 
@@ -1037,7 +1040,7 @@ h2 {
     justify-content: space-evenly;
     align-items: center;
     padding: 12px 0;
-    border-top: 1px solid gold;
+    border-top: 1px solid #f0c05a;
     z-index: 1000;
     height: 72px;
 }
@@ -1060,16 +1063,16 @@ h2 {
 
 .telegram-nav-button i {
     font-size: 1.7em;
-    color: gold;
+    color: #f0c05a;
 }
 
 .telegram-nav-button:hover, .telegram-nav-button.active {
-    color: gold;
+    color: #f0c05a;
     transform: scale(1.1);
 }
 
 .telegram-nav-button:hover i, .telegram-nav-button.active i {
-    color: gold;
+    color: #f0c05a;
 }
 
 .telegram-nav-button:active {
@@ -1092,7 +1095,7 @@ h2 {
     font-family: 'Cinzel', serif;
     font-size: 0.95em;
     font-weight: 700;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease, transform 0.2s ease;
@@ -1124,7 +1127,7 @@ h2 {
 .currency-title {
     font-family: 'Cinzel', serif;
     font-size: 0.85em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 8px;
 }
 
@@ -1135,7 +1138,7 @@ h2 {
     background: #0d0e12;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     justify-content: center;
 }
 
@@ -1177,7 +1180,7 @@ h2 {
     background: #0d0e12;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     font-size: 0.8em;
     color: #e0e0ff;
     display: flex;
@@ -1194,7 +1197,7 @@ h2 {
 
 .copy-icon {
     font-size: 0.9em;
-    color: gold;
+    color: #f0c05a;
     cursor: pointer;
     transition: filter 0.2s;
 }
@@ -1219,7 +1222,7 @@ h2 {
     background: #0d0e12;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     font-size: 0.8em;
     color: #e0e0ff;
     margin-bottom: 0px;
@@ -1241,7 +1244,7 @@ h2 {
 
 .max-button {
     background: #0d0e12;
-    color: gold;
+    color: #f0c05a;
     padding: 2px 10px;
     height: 35px;
     font-size: 0.85em;
@@ -1335,7 +1338,7 @@ h2 {
     display: flex;
     align-items: center;
     background: #0d0e12;
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     border-radius: 12px;
     padding: 10px;
     box-shadow: 0 0 20px rgba(240, 192, 90, 0.2);
@@ -1349,7 +1352,7 @@ h2 {
 
 .deposit-star-icon {
     font-size: 1.5em;
-    color: gold;
+    color: #f0c05a;
     margin-right: 12px;
     filter: drop-shadow(0 0 8px rgba(240, 192, 90, 0.6));
 }
@@ -1384,7 +1387,7 @@ h2 {
 .deposit-unit {
     font-family: 'Cinzel', serif;
     font-size: 1em;
-    color: gold;
+    color: #f0c05a;
     font-weight: 600;
     margin-left: 8px;
     margin-right: 5px;
@@ -1394,6 +1397,13 @@ h2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+}
+@media (max-width: 275px) {
+    .deposit-quick-amounts {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 10px;
+    }
 }
 
 .quick-amount-btn {
@@ -1457,7 +1467,7 @@ h2 {
 
 .deposit-submit i {
     font-size: 1.2em;
-    color: gold;
+    color: #f0c05a;
 }
 
 .deposit-submit:hover {
@@ -1478,7 +1488,7 @@ h2 {
 
 .star-package-btn {
     background: linear-gradient(135deg, rgba(28, 17, 41, 0.8), rgba(42, 27, 62, 0.8));
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     border-radius: 12px;
     padding: 15px 20px;
     display: flex;
@@ -1527,7 +1537,7 @@ h2 {
 
 .star-package-btn i {
     font-size: 2em;
-    color: gold;
+    color: #f0c05a;
     filter: drop-shadow(0 0 8px rgba(240, 192, 90, 0.6));
 }
 
@@ -1541,7 +1551,7 @@ h2 {
 
 .star-package-btn .star-bonus {
     font-size: 0.9em;
-    color: gold;
+    color: #f0c05a;
     font-weight: 600;
     background: rgba(240, 192, 90, 0.1);
     padding: 5px 12px;
@@ -1559,7 +1569,7 @@ h2 {
 }
 
 .withdrawal-status i {
-    color: gold;
+    color: #f0c05a;
     font-size: 2em;
     margin-bottom: 10px;
     display: block;
@@ -1579,7 +1589,7 @@ h2 {
 }
 
 .withdrawal-status p strong {
-    color: gold;
+    color: #f0c05a;
     font-family: 'Cinzel', serif;
     font-size: 1.1em;
     display: block;
@@ -1591,7 +1601,7 @@ h2 {
     background: #0d0e12;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     font-size: 0.8em;
     color: #e0e0ff;
     margin-bottom: 8px;
@@ -1622,7 +1632,7 @@ h2 {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     filter: drop-shadow(0 0 5px rgba(159, 54, 241, 0.3));
     margin-left: 20px;
 }
@@ -1630,7 +1640,7 @@ h2 {
 .profile-info h3 {
     font-family: 'Cinzel', serif;
     font-size: 1.2em;
-    color: gold;
+    color: #f0c05a;
     margin-bottom: 8px;
     text-align: center;
 }
@@ -1651,7 +1661,7 @@ h2 {
     background: #0d0e12;
     color: #e0e0ff;
     padding: 8px;
-    border: 1px solid gold;
+    border: 1px solid #f0c05a;
     border-radius: 8px;
     font-size: 1em;
     width: 100%;
@@ -1721,7 +1731,7 @@ h2 {
 
 
 .setting-label i {
-    color: gold;
+    color: #f0c05a;
     font-size: 1em;
 }
 
@@ -1737,7 +1747,7 @@ h2 {
     display: flex;
     align-items: center;
     background: linear-gradient(135deg, #1c1129, #2a1b3e);
-    border: 2px solid gold;
+    border: 2px solid #f0c05a;
     border-radius: 25px;
     padding: 8px 16px;
     font-family: 'Cinzel', serif;
@@ -1753,7 +1763,7 @@ h2 {
 
 .music-toggle-btn i {
     font-size: 1.1em;
-    color: gold;
+    color: #f0c05a;
     transition: all 0.3s ease;
 }
 
@@ -1764,7 +1774,7 @@ h2 {
 }
 
 .music-toggle-btn.active i {
-    color: gold;
+    color: #f0c05a;
     animation: music-pulse 1.5s ease-in-out infinite;
 }
 
@@ -1848,12 +1858,12 @@ h2 {
     filter: drop-shadow(0 0 5px rgba(159, 54, 241, 0.3));
 }
 
-/* @media (max-width: 360px) {
+@media (max-width: 360px) {
     body {
         padding: calc(10px + env(safe-area-inset-top)) 8px calc(70px + env(safe-area-inset-bottom));
     }
 
-    .casino-container, 
+    /* .casino-container, 
     .leaders-container, 
     .balance-container, 
     .friends-container, 
@@ -1861,7 +1871,7 @@ h2 {
         max-width: 100%;
         margin: 5px;
         padding: calc(8px + env(safe-area-inset-top)) 8px calc(10px + env(safe-area-inset-bottom));
-    }
+    } */
 
     .casino-container.fullscreen {
         margin-top: calc(35px + env(safe-area-inset-top));
@@ -1897,25 +1907,25 @@ h2 {
         height: 45px;
     }
 
-    .controls {
+    /* .controls {
         gap: 8px;
-    }
+    } */
 
-    .spin-button {
+    /* .spin-button {
         width: 70px;
         height: 70px;
-    }
+    } */
 
-    .control-button.bet-settings-button,
+    /* .control-button.bet-settings-button,
     .control-button.auto-button {
         padding: 10px 12px;
         min-width: 85px;
         max-width: 120px;
         height: 48px;
         font-size: 1em;
-    }
+    } */
 
-    .paytable-button {
+    /* .paytable-button {
         padding: 10px 20px;
         min-width: 160px;
         height: 50px;
@@ -1927,7 +1937,7 @@ h2 {
         width: 90%;
         padding: 12px;
         max-width: 280px;
-    }
+    } */
 
     .telegram-nav {
         height: 60px;
@@ -1957,7 +1967,7 @@ h2 {
         height: 100px;
     }
 
-    .profile-header {
+    /* .profile-header {
         gap: 15px;
         margin-bottom: 15px;
     }
@@ -1973,7 +1983,7 @@ h2 {
 
     .profile-info p {
         font-size: 1em;
-    }
+    } */
 
     .info-box h3 {
         font-size: 0.7em;
@@ -1987,11 +1997,11 @@ h2 {
         padding: 8px;
     }
 
-    .bet-settings-label, .bet-settings-value, .bet-adjust-button {
+    /* .bet-settings-label, .bet-settings-value, .bet-adjust-button {
         font-size: 0.75em;
-    }
+    } */
 
-    .max-bet-button {
+   .max-bet-button {
         padding: 4px 8px;
         font-size: 0.7em;
     }
@@ -2040,15 +2050,15 @@ h2 {
         padding: calc(8px + env(safe-area-inset-top)) 6px calc(60px + env(safe-area-inset-bottom));
     }
 
-    .casino-container, 
-    .leaders-container, 
-    .balance-container, 
+    /* .casino-container, 
+    .leaders-container,  */
+    /* .balance-container, 
     .friends-container, 
     .profile-container {
         max-width: 100%;
         margin: 3px;
         padding: calc(6px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
-    }
+    } */
 
     .casino-container.fullscreen {
         margin-top: calc(30px + env(safe-area-inset-top));
@@ -2084,16 +2094,16 @@ h2 {
         height: 35px;
     }
 
-    .controls {
+    /* .controls {
         gap: 6px;
     }
 
     .spin-button {
         width: 60px;
         height: 60px;
-    }
+    } */
 
-    .control-button.bet-settings-button,
+    /* .control-button.bet-settings-button,
     .control-button.auto-button {
         padding: 8px 10px;
         min-width: 75px;
@@ -2114,7 +2124,7 @@ h2 {
         width: 95%;
         padding: 12px;
         max-width: 280px;
-    }
+    } */
 
     .telegram-nav {
         height: 60px;
@@ -2144,12 +2154,12 @@ h2 {
         height: 90px;
     }
 
-    .profile-header {
+    /* .profile-header {
         gap: 12px;
         margin-bottom: 12px;
-    }
+    } */
 
-    .profile-avatar {
+    /* .profile-avatar {
         width: 55px;
         height: 55px;
     }
@@ -2160,7 +2170,7 @@ h2 {
 
     .profile-info p {
         font-size: 0.9em;
-    }
+    } */
 
     .info-box h3 {
         font-size: 0.65em;
@@ -2174,9 +2184,9 @@ h2 {
         padding: 6px;
     }
 
-    .bet-settings-label, .bet-settings-value, .bet-adjust-button {
+    /* .bet-settings-label, .bet-settings-value, .bet-adjust-button {
         font-size: 0.75em;
-    }
+    } */
 
     .max-bet-button {
         padding: 4px 8px;
@@ -2220,4 +2230,4 @@ h2 {
     .deposit-warning {
         font-size: 0.65em;
     }
-} */
+}
