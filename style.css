@@ -1676,7 +1676,7 @@ h2 {
 .gameSettings {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 .gameSettings .profile-section {
     width: 100%;
