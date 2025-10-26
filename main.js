@@ -1020,7 +1020,7 @@ async function creditStarsBalance(stars) {
 function loadDeposit() {
     balanceContainer.innerHTML = `
         <div class="page-header">
-            <img src="images/logo.png" alt="Lucky Wizard" class="logo">
+            <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
             <div class="wallet-balance" id="currentBalanceWallet">⭐ ${Math.floor(balance)} Stars</div>
         </div>
         <div class="wallet-divider"></div>
