@@ -1,4 +1,4 @@
-# Lucky Wizard Bot - FIXED Referral System
+# Blessed Wizard Bot - FIXED Referral System
 # Install: pip install python-telegram-bot==20.7
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
@@ -18,8 +18,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_TOKEN = "8265410692:AAGkx4V3CPymkRxaidj2gI9MvD2wJaiY0Ck"
-WEBAPP_URL = "https://visionary-gingersnap-ab5c81.netlify.app/"
+BOT_TOKEN = "8417592854:AAHYll3iNtfdBjh9q3q5yiZ3o0OtsTh-tMQ"
+WEBAPP_URL = "https://zippy-creponne-c235b5.netlify.app/"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -113,7 +113,7 @@ async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 def main():
     logger.info("=" * 60)
-    logger.info("🧙‍♂️ LUCKY WIZARD BOT AWAKENING...")
+    logger.info("🧙‍♂️ BLESSED WIZARD BOT AWAKENING...")
     logger.info("=" * 60)
     
     app = Application.builder().token(BOT_TOKEN).build()

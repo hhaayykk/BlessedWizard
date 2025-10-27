@@ -3,7 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Wizard</title>
+    <title>Blessed Wizard</title>
+    <style>
+        /* Splash Screen Styles */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: (#0d0e12);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #splashScreen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-logo {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        .loading-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .loading-bar-container {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #f0c05a);
+            background-size: 200% 100%;
+            animation: loading 2s linear infinite, shimmer 1.5s ease-in-out infinite;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+            }
+        }
+
+        .loading-percentage {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Hide main content until loaded */
+        body.loading #mainContent {
+            display: none;
+        }
+        
+/* Ensure consistent display for main content */
+#mainContent {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+        
+        /* Show active container */
+        .casino-container.active,
+        .leaders-container.active,
+        .balance-container.active,
+        .friends-container.active,
+        .profile-container.active {
+            display: block !important;
+        }
+        
+        /* Initially show game container */
+        #gameContainer {
+            display: block;
+        }
+    </style>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -12,300 +133,437 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
 </head>
-<body>
-    <!-- Unified Page Header -->
-    <div class="page-header">
-        <img src="images/logo 1.png" alt="Lucky Wizard" class="logo">
-        <div class="wallet-balance" id="currentBalance">⭐ 0</div>
+<body class="loading">
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <img src="images/splash.png" alt="Blessed Wizard" class="splash-logo" id="splashLogo">
+        <div class="loading-text">Loading Blessed Wizard ...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-percentage" id="loadingPercentage">0%</div>
     </div>
 
-    <div id="dimmedOverlay" class="dimmed-overlay"></div>
-    <div id="resultOverlay" class="result-overlay">
-        <span id="resultText" class="result-text"></span>
-    </div>
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Unified Page Header -->
+        <div class="page-header">
+            <img src="images/logo 1.png" alt="Blessed Wizard" class="logo">
+            <div class="wallet-balance" id="currentBalance">⭐ 0</div>
+        </div>
 
-    <!-- Game Container -->
-    <div id="gameContainer" class="casino-container">
-        <div class="info-panel">
-            <div class="info-box">
-                <h3>Bet</h3>
-                <div class="value" id="betLevel">1</div>
-            </div>
-            <div class="info-box">
-                <h3>Star Value</h3>
-                <div class="value" id="coinValue">1.00</div>
-            </div>
-            <div class="info-box">
-                <h3>Total Bet</h3>
-                <div class="value" id="totalBet">20.00</div>
-            </div>
+        <div id="dimmedOverlay" class="dimmed-overlay"></div>
+        <div id="resultOverlay" class="result-overlay">
+            <span id="resultText" class="result-text"></span>
         </div>
-        <img src="images/valshebnik.png" class="character-image">
-        <div class="slot-machine">
-            <div class="slot-frame">
-                <div class="reel-container"><div class="reel" id="reel1"></div></div>
-                <div class="reel-container"><div class="reel" id="reel2"></div></div>
-                <div class="reel-container"><div class="reel" id="reel3"></div></div>
-                <div class="reel-container"><div class="reel" id="reel4"></div></div>
-                <div class="reel-container"><div class="reel" id="reel5"></div></div>
-            </div>
-        </div>
-        <div class="controls">
-            <div class="right-controls">
-                <button class="paytable-button button-table" id="paytableButton">Pay<br>Table</button>
-            </div>
-            <div class="btnCombo">
-                <div class="left-controls">
-                    <button class="control-button bet-settings-button button" id="betSettingsButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-suit-spade-fill" viewBox="0 0 16 16">
-                            <path d="M7.184 11.246A3.5 3.5 0 0 1 1 9c0-1.602 1.14-2.633 2.66-4.008C4.986 3.792 6.602 2.33 8 0c1.398 2.33 3.014 3.792 4.34 4.992C13.86 6.367 15 7.398 15 9a3.5 3.5 0 0 1-6.184 2.246 20 20 0 0 0 1.582 2.907c.231.35-.02.847-.438.847H6.04c-.419 0-.67-.497-.438-.847a20 20 0 0 0 1.582-2.907"/>
-                        </svg>
-                        <p>Bet</p>
-                    </button>
-                    <button class="control-button auto-button button" id="autoButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 640 640">
-                            <path d="M552 256L408 256C398.3 256 389.5 250.2 385.8 241.2C382.1 232.2 384.1 221.9 391 215L437.7 168.3C362.4 109.7 253.4 115 184.2 184.2C109.2 259.2 109.2 380.7 184.2 455.7C259.2 530.7 380.7 530.7 455.7 455.7C463.9 447.5 471.2 438.8 477.6 429.6C487.7 415.1 507.7 411.6 522.2 421.7C536.7 431.8 540.2 451.8 530.1 466.3C521.6 478.5 511.9 490.1 501 501C401 601 238.9 601 139 501C39.1 401 39 239 139 139C233.3 44.7 382.7 39.4 483.3 122.8L535 71C541.9 64.1 552.2 62.1 561.2 65.8C570.2 69.5 576 78.3 576 88L576 232C576 245.3 565.3 256 552 256z"/>
-                        </svg>
-                        <p>Auto</p>
-                    </button>
-                </div>
-                <div class="centerright">
-                    <button class="spin-button" id="spinButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 640 640">
-                            <path d="M129.9 292.5C143.2 199.5 223.3 128 320 128C373 128 421 149.5 455.8 184.2C456 184.4 456.2 184.6 456.4 184.8L464 192L416.1 192C398.4 192 384.1 206.3 384.1 224C384.1 241.7 398.4 256 416.1 256L544.1 256C561.8 256 576.1 241.7 576.1 224L576.1 96C576.1 78.3 561.8 64 544.1 64C526.4 64 512.1 78.3 512.1 96L512.1 149.4L500.8 138.7C454.5 92.6 390.5 64 320 64C191 64 84.3 159.4 66.6 283.5C64.1 301 76.2 317.2 93.7 319.7C111.2 322.2 127.4 310 129.9 292.6zM573.4 356.5C575.9 339 563.7 322.8 546.3 320.3C528.9 317.8 512.6 330 510.1 347.4C496.8 440.4 416.7 511.9 320 511.9C267 511.9 219 490.4 184.2 455.7C184 455.5 183.8 455.3 183.6 455.1L176 447.9L223.9 447.9C241.6 447.9 255.9 433.6 255.9 415.9C255.9 398.2 241.6 383.9 223.9 383.9L96 384C87.5 384 79.3 387.4 73.3 393.5C67.3 399.6 63.9 407.7 64 416.3L65 543.3C65.1 561 79.6 575.2 97.3 575C115 574.8 129.2 560.4 129 542.7L128.6 491.2L139.3 501.3C185.6 547.4 249.5 576 320 576C449 576 555.7 480.6 573.4 356.5z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div id="betSettingsModal" class="bet-settings-modal">
-            <div class="bet-settings-row">
-                <div class="bet-settings-label">Bet (Stars/Line)</div>
-                <div class="adjust-group">
-                    <button class="bet-adjust-button" id="decreaseBetLevel">−</button>
-                    <div class="bet-settings-value" id="betLevelModal">1</div>
-                    <button class="bet-adjust-button" id="increaseBetLevel">+</button>
-                </div>
-            </div>
-            <div class="bet-settings-row">
-                <div class="bet-settings-label">Star Value</div>
-                <div class="adjust-group">
-                    <button class="bet-adjust-button" id="decreaseCoinValue">−</button>
-                    <div class="bet-settings-value" id="coinValueModal">1.00</div>
-                    <button class="bet-adjust-button" id="increaseCoinValue">+</button>
-                </div>
-            </div>
-            <div class="bet-settings-row">
-                <div class="bet-settings-label">Total Bet</div>
-                <div class="bet-settings-value" id="totalBetModal">20.00</div>
-                <button class="bet-adjust-button max-bet-button" id="maxBetButton">Max</button>
-            </div>
-            <button class="ok-button" id="okButton">OK</button>
-        </div>
-        <div id="autoSettingsModal" class="auto-settings-modal">
-            <button class="toggle-auto-spin" id="toggleAutoSpin">Enable Auto Spin</button>
-            <div class="bet-settings-row disabled-setting" id="autoSpinsRow">
-                <div class="bet-settings-label">Auto Spins</div>
-                <div class="bet-settings-value" id="autoSpinsModal">5</div>
-                <button class="bet-adjust-button" id="decreaseAutoSpins">−</button>
-                <button class="bet-adjust-button" id="increaseAutoSpins">+</button>
-            </div>
-            <div class="bet-settings-row disabled-setting" id="quickSpinRow">
-                <div class="bet-settings-label">Quick Spin</div>
-                <input type="checkbox" id="quickSpinCheckbox">
-            </div>
-            <button class="ok-button" id="okAutoButton">CANCEL</button>
-        </div>
-        <div id="paytableModal" class="paytable-modal">
-            <div class="paytable-content">
-                <h3>Paytable</h3>
-                <p>Wins are calculated across 20 paylines. Match 3, 4, or 5 symbols from the left reel.</p>
-                <div class="paytable-item">
-                    <img src="images/avelavokmagic.PNG">
-                    <span>Loop: 5x - 37.5, 4x - 7.5, 3x - 3.75</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/ballmagic.png">
-                    <span>Magic Ball: 5x - 25.0, 4x - 5.0, 3x - 2.5</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/bookmagic.png">
-                    <span>Book: 5x - 20.0, 4x - 4.0, 3x - 2.0</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/hatmagic.png">
-                    <span>Hat: 5x - 15.0, 4x - 3.0, 3x - 1.5</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/lightermagic.PNG">
-                    <span>Lighter: 5x - 10.0, 4x - 2.0, 3x - 1.0</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/notemagic.png">
-                    <span>Note: 5x - 7.5, 4x - 1.5, 3x - 0.75</span>
-                </div>
-                <div class="paytable-item">
-                    <img src="images/poisonmagic.png">
-                    <span>Poison: 5x - 5.0, 4x - 1.0, 3x - 0.5</span>
-                </div>
-                <p>Total Win = (Bet per line × Symbol Multiplier) × Number of lines.</p>
-            </div>
-            <button class="ok-button" id="okPaytableButton">OK</button>
-        </div>
-    </div>
 
-    <!-- Leaders Container -->
-    <div id="leadersContainer" class="leaders-container" style="display: none;">
-        <div class="leaderboard-header">
-            <h3 class="leaderboard-title">Leaderboard</h3>
-            <div class="leaderboard-subtitle">September 2025</div>
-        </div>
-        <div class="leaderboard-podium">
-            <div class="podium-item podium-second">
-                <div class="podium-rank">🥈</div>
-                <img src="images/Arabic.jpg" class="podium-avatar">
-                <div class="podium-name">الأحمد</div>
-                <div class="podium-score">⭐ 750 000</div>
-                <div class="podium-base podium-base-second">2</div>
-            </div>
-            <div class="podium-item podium-first">
-                <div class="podium-rank">🥇</div>
-                <img src="images/David.png" class="podium-avatar podium-avatar-winner">
-                <div class="podium-name">David</div>
-                <div class="podium-score">⭐ 1 250 000</div>
-                <div class="podium-base podium-base-first">1</div>
-            </div>
-            <div class="podium-item podium-third">
-                <div class="podium-rank">🥉</div>
-                <div class="podium-avatar">A</div>
-                <div class="podium-name">A</div>
-                <div class="podium-score">⭐ 500 000</div>
-                <div class="podium-base podium-base-third">3</div>
-            </div>
-        </div>
-        <div class="leaderboard-list">
-            <div class="leaderboard-item">
-                <div class="leaderboard-position">4</div>
-                <div class="leaderboard-avatar">V</div>
-                <div class="leaderboard-player">
-                    <div class="leaderboard-name">Vladimir</div>
-                    <div class="leaderboard-score">⭐ 300 000</div>
+        <!-- Game Container -->
+        <div id="gameContainer" class="casino-container">
+            <div class="info-panel">
+                <div class="info-box">
+                    <h3>Bet</h3>
+                    <div class="value" id="betLevel">1</div>
+                </div>
+                <div class="info-box">
+                    <h3>Star Value</h3>
+                    <div class="value" id="coinValue">1.00</div>
+                </div>
+                <div class="info-box">
+                    <h3>Total Bet</h3>
+                    <div class="value" id="totalBet">20.00</div>
                 </div>
             </div>
-            <div class="leaderboard-item">
-                <div class="leaderboard-position">5</div>
-                <img src="images/Gold.jpg" class="leaderboard-avatar">
-                <div class="leaderboard-player">
-                    <div class="leaderboard-name">Golddd</div>
-                    <div class="leaderboard-score">⭐ 200 000</div>
+            <img src="images/valshebnik.png" class="character-image">
+            <div class="slot-machine">
+                <div class="slot-frame">
+                    <div class="reel-container"><div class="reel" id="reel1"></div></div>
+                    <div class="reel-container"><div class="reel" id="reel2"></div></div>
+                    <div class="reel-container"><div class="reel" id="reel3"></div></div>
+                    <div class="reel-container"><div class="reel" id="reel4"></div></div>
+                    <div class="reel-container"><div class="reel" id="reel5"></div></div>
                 </div>
             </div>
-        </div>
-        <div class="leaderboard-info">
-            <i class="fas fa-info-circle"></i>
-            <p>Leaderboard shows the top 5 players with the most spins last month. It resets monthly, and rewards are credited to your balance.</p>
-        </div>
-    </div>
-
-    <!-- Wallet Container -->
-    <div id="balanceContainer" class="balance-container" style="display: none;">
-        <div class="wallet-divider"></div>
-        <div class="deposit-withdraw-row">
-            <button class="deposit-btn active" id="depositButton">Deposit</button>
-            <button class="withdraw-btn" id="withdrawButton">Withdraw</button>
-        </div>
-        <!-- Content will be dynamically loaded -->
-    </div>
-
-    <!-- Friends Container -->
-    <div id="friendsContainer" class="friends-container" style="display: none;">
-        <div class="referral-header">
-            <h3 class="referral-title">Invite Friends</h3>
-            <div class="referral-subtitle">Earn 15 Stars per friend!</div>
-        </div>
-        <div class="referral-stats">
-            <div class="referral-stat-box">
-                <div class="stat-number" id="friendsInvited">0</div>
-                <div class="stat-label">Friends Invited</div>
-            </div>
-            <div class="referral-stat-box">
-                <div class="stat-number" id="totalEarned"><span style="font-size: 15px;">⭐</span> 0</div>
-                <div class="stat-label">Total Earned</div>
-            </div>
-        </div>
-        <div class="referral-link-section">
-            <div class="referral-link-title">Your Referral Link</div>
-            <div class="referral-link-container">
-                <span class="referral-link-text" id="referralLink">https://t.me/kazikkkbot?start=ref_USER123</span>
-                <i class="fa-solid fa-copy copy-icon" onclick="window.copyText(this, document.getElementById('referralLink').textContent)"></i>
-            </div>
-        </div>
-        <button class="share-button" id="shareButton"><i class="fas fa-share"></i> Share Link</button>
-        <div class="referral-info-box">
-            <i class="fas fa-info-circle"></i>
-            <div>
-                <div class="referral-info-title">How it works:</div>
-                <ul class="referral-info-list">
-                    <li>Share your unique referral link</li>
-                    <li>Friend registers using your link</li>
-                    <li>You get 15 Stars instantly!</li>
-                    <li>No limit on referrals</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profile Container -->
-    <div id="profileContainer" class="profile-container" style="display: none;">
-        <div class="profile-header">
-            <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
-            <div class="profile-info">
-                <h3 id="profileName">User Name</h3>
-                <p id="telegramId">Telegram ID: Not Set</p>
-                <p id="registrationDate">Registered: Not Set</p>
-            </div>
-        </div>
-        <div style="text-align: center;"><h2>Settings</h2></div>
-        <br>
-        <div class="gameSettings">
-            <div class="profile-section">
-                <div class="profile-setting-row">
-                    <div class="setting-label">
-                        <i class="fas fa-music"></i>
-                        <span>Music</span>
+            <div class="controls">
+                <div class="right-controls">
+                    <button class="paytable-button button-table" id="paytableButton">Pay<br>Table</button>
+                </div>
+                <div class="btnCombo">
+                    <div class="left-controls">
+                        <button class="control-button bet-settings-button button" id="betSettingsButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-suit-spade-fill" viewBox="0 0 16 16">
+                                <path d="M7.184 11.246A3.5 3.5 0 0 1 1 9c0-1.602 1.14-2.633 2.66-4.008C4.986 3.792 6.602 2.33 8 0c1.398 2.33 3.014 3.792 4.34 4.992C13.86 6.367 15 7.398 15 9a3.5 3.5 0 0 1-6.184 2.246 20 20 0 0 0 1.582 2.907c.231.35-.02.847-.438.847H6.04c-.419 0-.67-.497-.438-.847a20 20 0 0 0 1.582-2.907"/>
+                            </svg>
+                            <p>Bet</p>
+                        </button>
+                        <button class="control-button auto-button button" id="autoButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 640 640">
+                                <path d="M552 256L408 256C398.3 256 389.5 250.2 385.8 241.2C382.1 232.2 384.1 221.9 391 215L437.7 168.3C362.4 109.7 253.4 115 184.2 184.2C109.2 259.2 109.2 380.7 184.2 455.7C259.2 530.7 380.7 530.7 455.7 455.7C463.9 447.5 471.2 438.8 477.6 429.6C487.7 415.1 507.7 411.6 522.2 421.7C536.7 431.8 540.2 451.8 530.1 466.3C521.6 478.5 511.9 490.1 501 501C401 601 238.9 601 139 501C39.1 401 39 239 139 139C233.3 44.7 382.7 39.4 483.3 122.8L535 71C541.9 64.1 552.2 62.1 561.2 65.8C570.2 69.5 576 78.3 576 88L576 232C576 245.3 565.3 256 552 256z"/>
+                            </svg>
+                            <p>Auto</p>
+                        </button>
                     </div>
-                    <button class="music-toggle-btn active" id="musicToggle">
-                        <span class="music-status">ON</span>
-                    </button>
+                    <div class="centerright">
+                        <button class="spin-button" id="spinButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 640 640">
+                                <path d="M129.9 292.5C143.2 199.5 223.3 128 320 128C373 128 421 149.5 455.8 184.2C456 184.4 456.2 184.6 456.4 184.8L464 192L416.1 192C398.4 192 384.1 206.3 384.1 224C384.1 241.7 398.4 256 416.1 256L544.1 256C561.8 256 576.1 241.7 576.1 224L576.1 96C576.1 78.3 561.8 64 544.1 64C526.4 64 512.1 78.3 512.1 96L512.1 149.4L500.8 138.7C454.5 92.6 390.5 64 320 64C191 64 84.3 159.4 66.6 283.5C64.1 301 76.2 317.2 93.7 319.7C111.2 322.2 127.4 310 129.9 292.6zM573.4 356.5C575.9 339 563.7 322.8 546.3 320.3C528.9 317.8 512.6 330 510.1 347.4C496.8 440.4 416.7 511.9 320 511.9C267 511.9 219 490.4 184.2 455.7C184 455.5 183.8 455.3 183.6 455.1L176 447.9L223.9 447.9C241.6 447.9 255.9 433.6 255.9 415.9C255.9 398.2 241.6 383.9 223.9 383.9L96 384C87.5 384 79.3 387.4 73.3 393.5C67.3 399.6 63.9 407.7 64 416.3L65 543.3C65.1 561 79.6 575.2 97.3 575C115 574.8 129.2 560.4 129 542.7L128.6 491.2L139.3 501.3C185.6 547.4 249.5 576 320 576C449 576 555.7 480.6 573.4 356.5z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="language-selector">
-                <select id="languageSelect">
-                    <option value="en">English</option>
-                </select>
+            <div id="betSettingsModal" class="bet-settings-modal">
+                <div class="bet-settings-row">
+                    <div class="bet-settings-label">Bet (Stars/Line)</div>
+                    <div class="adjust-group">
+                        <button class="bet-adjust-button" id="decreaseBetLevel">−</button>
+                        <div class="bet-settings-value" id="betLevelModal">1</div>
+                        <button class="bet-adjust-button" id="increaseBetLevel">+</button>
+                    </div>
+                </div>
+                <div class="bet-settings-row">
+                    <div class="bet-settings-label">Star Value</div>
+                    <div class="adjust-group">
+                        <button class="bet-adjust-button" id="decreaseCoinValue">−</button>
+                        <div class="bet-settings-value" id="coinValueModal">1.00</div>
+                        <button class="bet-adjust-button" id="increaseCoinValue">+</button>
+                    </div>
+                </div>
+                <div class="bet-settings-row">
+                    <div class="bet-settings-label">Total Bet</div>
+                    <div class="bet-settings-value" id="totalBetModal">20.00</div>
+                    <button class="bet-adjust-button max-bet-button" id="maxBetButton">Max</button>
+                </div>
+                <button class="ok-button" id="okButton">OK</button>
+            </div>
+            <div id="autoSettingsModal" class="auto-settings-modal">
+                <button class="toggle-auto-spin" id="toggleAutoSpin">Enable Auto Spin</button>
+                <div class="bet-settings-row disabled-setting" id="autoSpinsRow">
+                    <div class="bet-settings-label">Auto Spins</div>
+                    <div class="bet-settings-value" id="autoSpinsModal">5</div>
+                    <button class="bet-adjust-button" id="decreaseAutoSpins">−</button>
+                    <button class="bet-adjust-button" id="increaseAutoSpins">+</button>
+                </div>
+                <div class="bet-settings-row disabled-setting" id="quickSpinRow">
+                    <div class="bet-settings-label">Quick Spin</div>
+                    <input type="checkbox" id="quickSpinCheckbox">
+                </div>
+                <button class="ok-button" id="okAutoButton">CANCEL</button>
+            </div>
+            <div id="paytableModal" class="paytable-modal">
+                <div class="paytable-content">
+                    <h3>Paytable</h3>
+                    <p>Wins are calculated across 20 paylines. Match 3, 4, or 5 symbols from the left reel.</p>
+                    <div class="paytable-item">
+                        <img src="images/avelavokmagic.PNG">
+                        <span>Loop: 5x - 37.5, 4x - 7.5, 3x - 3.75</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/ballmagic.png">
+                        <span>Magic Ball: 5x - 25.0, 4x - 5.0, 3x - 2.5</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/bookmagic.png">
+                        <span>Book: 5x - 20.0, 4x - 4.0, 3x - 2.0</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/hatmagic.png">
+                        <span>Hat: 5x - 15.0, 4x - 3.0, 3x - 1.5</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/lightermagic.PNG">
+                        <span>Lighter: 5x - 10.0, 4x - 2.0, 3x - 1.0</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/notemagic.png">
+                        <span>Note: 5x - 7.5, 4x - 1.5, 3x - 0.75</span>
+                    </div>
+                    <div class="paytable-item">
+                        <img src="images/poisonmagic.png">
+                        <span>Poison: 5x - 5.0, 4x - 1.0, 3x - 0.5</span>
+                    </div>
+                    <p>Total Win = (Bet per line × Symbol Multiplier) × Number of lines.</p>
+                </div>
+                <button class="ok-button" id="okPaytableButton">OK</button>
             </div>
         </div>
-        <br>
-        <a href="#" class="privacy-policy">Privacy Policy</a>
-        <div style="user-select: all;" class="footer">
-            <p>18+ only | Play responsibly | Terms apply</p>
-            <p>Website: In Process...</p>
-            <p>Support: <a href="https://t.me/BlessedWizardSupport">https://t.me/BlessedWizardSupport</a></p>
+
+        <!-- Leaders Container -->
+        <div id="leadersContainer" class="leaders-container" style="display: none;">
+            <div class="leaderboard-header">
+                <h3 class="leaderboard-title">Leaderboard</h3>
+                <div class="leaderboard-subtitle">September 2025</div>
+            </div>
+            <div class="leaderboard-podium">
+                <div class="podium-item podium-second">
+                    <div class="podium-rank">🥈</div>
+                    <img src="images/Arabic.jpg" class="podium-avatar">
+                    <div class="podium-name">الأحمد</div>
+                    <div class="podium-score">⭐ 750 000</div>
+                    <div class="podium-base podium-base-second">2</div>
+                </div>
+                <div class="podium-item podium-first">
+                    <div class="podium-rank">🥇</div>
+                    <img src="images/David.png" class="podium-avatar podium-avatar-winner">
+                    <div class="podium-name">David</div>
+                    <div class="podium-score">⭐ 1 250 000</div>
+                    <div class="podium-base podium-base-first">1</div>
+                </div>
+                <div class="podium-item podium-third">
+                    <div class="podium-rank">🥉</div>
+                    <div class="podium-avatar">A</div>
+                    <div class="podium-name">A</div>
+                    <div class="podium-score">⭐ 500 000</div>
+                    <div class="podium-base podium-base-third">3</div>
+                </div>
+            </div>
+            <div class="leaderboard-list">
+                <div class="leaderboard-item">
+                    <div class="leaderboard-position">4</div>
+                    <div class="leaderboard-avatar">V</div>
+                    <div class="leaderboard-player">
+                        <div class="leaderboard-name">Vladimir</div>
+                        <div class="leaderboard-score">⭐ 300 000</div>
+                    </div>
+                </div>
+                <div class="leaderboard-item">
+                    <div class="leaderboard-position">5</div>
+                    <img src="images/Gold.jpg" class="leaderboard-avatar">
+                    <div class="leaderboard-player">
+                        <div class="leaderboard-name">Golddd</div>
+                        <div class="leaderboard-score">⭐ 200 000</div>
+                    </div>
+                </div>
+            </div>
+            <div class="leaderboard-info">
+                <i class="fas fa-info-circle"></i>
+                <p>Leaderboard shows the top 5 players with the most spins last month. It resets monthly, and rewards are credited to your balance.</p>
+            </div>
+        </div>
+
+        <!-- Wallet Container -->
+        <div id="balanceContainer" class="balance-container" style="display: none;">
+            <div class="wallet-divider"></div>
+            <div class="deposit-withdraw-row">
+                <button class="deposit-btn active" id="depositButton">Deposit</button>
+                <button class="withdraw-btn" id="withdrawButton">Withdraw</button>
+            </div>
+        </div>
+
+        <!-- Friends Container -->
+        <div id="friendsContainer" class="friends-container" style="display: none;">
+            <div class="referral-header">
+                <h3 class="referral-title">Invite Friends</h3>
+                <div class="referral-subtitle">Earn 15 Stars per friend!</div>
+            </div>
+            <div class="referral-stats">
+                <div class="referral-stat-box">
+                    <div class="stat-number" id="friendsInvited">0</div>
+                    <div class="stat-label">Friends Invited</div>
+                </div>
+                <div class="referral-stat-box">
+                    <div class="stat-number" id="totalEarned"><span style="font-size: 15px;">⭐</span> 0</div>
+                    <div class="stat-label">Total Earned</div>
+                </div>
+            </div>
+            <div class="referral-link-section">
+                <div class="referral-link-title">Your Referral Link</div>
+                <div class="referral-link-container">
+                    <span class="referral-link-text" id="referralLink">https://t.me/BlessedWizardBot?start=ref_USER123</span>
+                    <i class="fa-solid fa-copy copy-icon" onclick="window.copyText(this, document.getElementById('referralLink').textContent)"></i>
+                </div>
+            </div>
+            <button class="share-button" id="shareButton"><i class="fas fa-share"></i> Share Link</button>
+            <div class="referral-info-box">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <div class="referral-info-title">How it works:</div>
+                    <ul class="referral-info-list">
+                        <li>Share your unique referral link</li>
+                        <li>Friend registers using your link</li>
+                        <li>You get 15 Stars instantly!</li>
+                        <li>No limit on referrals</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Container -->
+        <div id="profileContainer" class="profile-container" style="display: none;">
+            <div class="profile-header">
+                <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
+                <div class="profile-info">
+                    <h3 id="profileName">User Name</h3>
+                    <p id="telegramId">Telegram ID: Not Set</p>
+                    <p id="registrationDate">Registered: Not Set</p>
+                </div>
+            </div>
+            <div style="text-align: center;"><h2>Settings</h2></div>
             <br>
-            <hr>
-            <img src="images/responsible_gaming.png">
+            <div class="gameSettings">
+                <div class="profile-section">
+                    <div class="profile-setting-row">
+                        <div class="setting-label">
+                            <i class="fas fa-music"></i>
+                            <span>Music</span>
+                        </div>
+                        <button class="music-toggle-btn active" id="musicToggle">
+                            <span class="music-status">ON</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="language-selector">
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <a href="#" class="privacy-policy">Privacy Policy</a>
+            <div style="user-select: all;" class="footer">
+                <p>18+ only | Play responsibly | Terms apply</p>
+                <p>Website: In Process...</p>
+                <p>Support: <a href="https://t.me/BlessedWizardSupport">https://t.me/BlessedWizardSupport</a></p>
+                <br>
+                <hr>
+                <img src="images/responsible_gaming.png">
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="telegram-nav">
+            <button class="telegram-nav-button" id="leadersButton"><i class="fas fa-trophy"></i> Leaders</button>
+            <button class="telegram-nav-button" id="walletButton"><i class="fas fa-wallet"></i> Wallet</button>
+            <button class="telegram-nav-button active" id="playButton"><i class="fas fa-play"></i> Play</button>
+            <button class="telegram-nav-button" id="friendsButton"><i class="fas fa-users"></i> Referrals</button>
+            <button class="telegram-nav-button" id="profileButton"><i class="fas fa-user"></i> Profile</button>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <div class="telegram-nav">
-        <button class="telegram-nav-button" id="leadersButton"><i class="fas fa-trophy"></i> Leaders</button>
-        <button class="telegram-nav-button" id="walletButton"><i class="fas fa-wallet"></i> Wallet</button>
-        <button class="telegram-nav-button active" id="playButton"><i class="fas fa-play"></i> Play</button>
-        <button class="telegram-nav-button" id="friendsButton"><i class="fas fa-users"></i> Referrals</button>
-        <button class="telegram-nav-button" id="profileButton"><i class="fas fa-user"></i> Profile</button>
-    </div>
+    <script>
+        // Splash Screen Logic
+        let loadingProgress = 0;
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingPercentage = document.getElementById('loadingPercentage');
+        const splashScreen = document.getElementById('splashScreen');
+        
+        // Update progress bar
+        function updateProgress(percent) {
+            loadingProgress = Math.min(percent, 100);
+            loadingBar.style.width = loadingProgress + '%';
+            loadingPercentage.textContent = Math.floor(loadingProgress) + '%';
+        }
+        
+        // Simulate loading progress
+        function simulateLoading() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10 + 5;
+                if (progress >= 90) {
+                    clearInterval(interval);
+                    progress = 90;
+                }
+                updateProgress(progress);
+            }, 150);
+            
+            return interval;
+        }
+        
+        // Preload critical images
+        function preloadImages() {
+            const images = [
+                'images/splash.png',
+                'images/logo 1.png',
+                'images/valshebnik.png',
+                'images/avelavokmagic.PNG',
+                'images/ballmagic.png',
+                'images/bookmagic.png',
+                'images/hatmagic.png',
+                'images/lightermagic.PNG',
+                'images/notemagic.png',
+                'images/poisonmagic.png'
+            ];
+            
+            let loaded = 0;
+            const total = images.length;
+            
+            return Promise.all(images.map(src => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = img.onerror = () => {
+                        loaded++;
+                        const imgProgress = 30 + (loaded / total) * 50;
+                        updateProgress(imgProgress);
+                        resolve();
+                    };
+                    img.src = src;
+                });
+            }));
+        }
+        
+        // Hide splash screen
+        function hideSplashScreen() {
+            updateProgress(100);
+            setTimeout(() => {
+                splashScreen.classList.add('fade-out');
+                document.body.classList.remove('loading');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                }, 500);
+            }, 300);
+        }
+        
+        // Initialize loading
+        async function initializeApp() {
+            // Start progress simulation
+            const loadingInterval = simulateLoading();
+            
+            try {
+                // Wait for DOM
+                if (document.readyState === 'loading') {
+                    await new Promise(resolve => {
+                        document.addEventListener('DOMContentLoaded', resolve);
+                    });
+                }
+                
+                updateProgress(30);
+                
+                // Preload images
+                await preloadImages();
+                
+                updateProgress(85);
+                
+                // Wait for window load
+                if (document.readyState !== 'complete') {
+                    await new Promise(resolve => {
+                        window.addEventListener('load', resolve);
+                    });
+                }
+                
+                // Small delay for smooth transition
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                clearInterval(loadingInterval);
+                hideSplashScreen();
+                
+            } catch (error) {
+                console.error('Loading error:', error);
+                clearInterval(loadingInterval);
+                hideSplashScreen();
+            }
+        }
+        
+        // Start initialization immediately
+        initializeApp();
+        
+        // Fallback: force hide after 8 seconds
+        setTimeout(() => {
+            if (!splashScreen.classList.contains('fade-out')) {
+                hideSplashScreen();
+            }
+        }, 8000);
+    </script>
 
     <script type="module" src="main.js"></script>
+    <script type="module" src="config.js"></script>
 </body>
 </html>

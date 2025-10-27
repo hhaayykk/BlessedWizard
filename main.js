@@ -1,14 +1,6 @@
+import { firebaseConfig, TELEGRAM_BOT_TOKEN, TELEGRAM_GROUP_CHAT_ID, BOT_USERNAME } from './config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBk9FvvlfxIUuUsZ7n-aA6pHCCHew1U8cQ",
-  authDomain: "hastatkashxati.firebaseapp.com",
-  projectId: "hastatkashxati",
-  storageBucket: "hastatkashxati.firebasestorage.app",
-  messagingSenderId: "316190502279",
-  appId: "1:316190502279:web:2875b0ed8dea0961433722"
-};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -41,12 +33,10 @@ let sessionStats = {
 // ===============================
 // Game Variables
 // ===============================
-// Game Variables
-// ===============================
 let balance = 0;
 let coins_per_line = 1;
 let coin_value = 1.0;
-let total_bet = 20 * coins_per_line * coin_value;
+let total_bet = 25 * coins_per_line * coin_value;
 let isSpinning = false;
 let isAutoSpinning = false;
 let autoSpinEnabled = false;
@@ -60,17 +50,12 @@ const MIN_WITHDRAW = 2000;
 const TRANSACTION_COOLDOWN = 6 * 60 * 60 * 1000;
 const REFERRAL_BONUS_REFERRER = 15.0;
 const REFERRAL_BONUS_NEW_USER = 15.0;
-const BOT_USERNAME = "kazikkkbot";
 
 // Background Music
 let backgroundMusic = null;
 let isMusicPlaying = false;
 
-// Telegram Bot Configuration
-const TELEGRAM_BOT_TOKEN = "8265410692:AAGkx4V3CPymkRxaidj2gI9MvD2wJaiY0Ck";
-const TELEGRAM_GROUP_CHAT_ID = "-1003226470463";
-
-// Slot symbols
+// Symbols
 const symbols = [
     { name: 'petla', src: 'images/avelavokmagic.PNG', weight: 1 },
     { name: 'magicball', src: 'images/ballmagic.png', weight: 2 },
@@ -544,6 +529,7 @@ async function loadReferralInfo(userId) {
     }
 }
 
+
 function shareReferralLink() {
     if (!telegramId) {
         showError('User not initialized');
@@ -551,7 +537,7 @@ function shareReferralLink() {
     }
     
     const referralLink = generateReferralLink(telegramId);
-    const shareText = `🎰 Join Lucky Wizard and get ${REFERRAL_BONUS_NEW_USER} Stars bonus!\n\nPlay slots and win real Telegram Stars!\n\nUse my link:`;
+    const shareText = `Join Blessed Wizard and get ${REFERRAL_BONUS_NEW_USER} Stars bonus!\n\nPlay and win real Telegram Stars!\n\nUse my link:`;
     
     if (window.Telegram && window.Telegram.WebApp) {
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
@@ -757,11 +743,11 @@ async function initUser() {
                             console.log("✅ REFERRAL BONUS APPLIED!");
                         } else {
                             console.log("❌ Referral processing failed");
-                            showSuccess("Welcome to Lucky Wizard!");
+                            showSuccess("Welcome to Blessed Wizard!");
                         }
                     } else {
                         console.log("👋 NEW USER without referral");
-                        setTimeout(() => showSuccess("Welcome to Lucky Wizard!"), 1000);
+                        setTimeout(() => showSuccess("Welcome to Blessed Wizard!"), 1000);
                     }
                 } else {
                     console.log("👋 RETURNING USER");
@@ -824,7 +810,7 @@ function updateBalanceDisplay() {
 }
 
 function updateBetDisplay() {
-    total_bet = 20 * coins_per_line * coin_value;
+    total_bet = 25 * coins_per_line * coin_value;
     betLevelDisplay.textContent = coins_per_line;
     coinValueDisplay.textContent = coin_value.toFixed(2);
     totalBetDisplay.textContent = Math.floor(total_bet);
@@ -946,7 +932,7 @@ async function handleStarsDeposit(stars) {
             },
             body: JSON.stringify({
                 title: `${stars} Stars`,
-                description: `Purchase ${stars} Stars for Lucky Wizard`,
+                description: `Purchase ${stars} Stars for Blessed Wizard`,
                 payload: paymentId,
                 provider_token: "",
                 currency: "XTR",
@@ -1260,7 +1246,7 @@ async function handleWithdrawSubmit() {
 }
 
 // ===============================
-// Slot Machine Functions
+// Machine Functions
 // ===============================
 function generateReelSymbols() {
     const reelSymbols = [];
@@ -1410,9 +1396,9 @@ async function checkWin(reelResults) {
         
         const multiplier = roundedWin / total_bet;
         let winMessage;
-        if (multiplier >= 20) {
+        if (multiplier >= 100) {
             winMessage = `MEGA WIN! ${roundedWin} Stars!`;
-        } else if (multiplier >= 5) {
+        } else if (multiplier >= 25) {
             winMessage = `BIG WIN! ${roundedWin} Stars!`;
         } else if (multiplier >= 2) {
             winMessage = `NICE WIN! ${roundedWin} Stars!`;
@@ -1701,8 +1687,8 @@ okButton.addEventListener('click', toggleBetSettingsModal);
 okPaytableButton.addEventListener('click', togglePaytableModal);
 
 maxBetButton.addEventListener('click', () => {
-    coins_per_line = 10;
-    coin_value = 5.0;
+    coins_per_line = 20;
+    coin_value = 10.0;
     updateBetDisplay();
 });
 
@@ -1737,7 +1723,7 @@ decreaseAutoSpins.addEventListener('click', () => {
 });
 
 increaseAutoSpins.addEventListener('click', () => {
-    autoSpins = Math.min(20, autoSpins + 5);
+    autoSpins = Math.min(25, autoSpins + 5);
     autoSpinsModal.textContent = autoSpins;
 });
 
@@ -1797,7 +1783,7 @@ document.querySelectorAll('img').forEach(img => {
 // Export copyText function globally
 window.copyText = copyText;
 
-console.log("✅ Lucky Wizard - Full system loaded and ready!");
+console.log("✅ Blessed Wizard - Full system loaded and ready!");
 console.log("🔗 Referral system: ACTIVE");
 console.log("💰 Payment system: ACTIVE");
 console.log("🎰 Game engine: ACTIVE");
