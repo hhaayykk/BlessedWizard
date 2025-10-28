@@ -12,7 +12,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0d0e12; /* FIXED: Removed invalid parentheses */
+            background: #0d0e12;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -64,7 +64,7 @@
 
         .loading-bar {
             height: 100%;
-            background: linear-gradient(90deg, #f0c05a, #f0c05a); /* FIXED: Added proper gradient */
+            background: linear-gradient(90deg, #f0c05a, #d4a855);
             background-size: 200% 100%;
             animation: loading 2s linear infinite, shimmer 1.5s ease-in-out infinite;
             border-radius: 10px;
@@ -126,12 +126,7 @@
         }
     </style>
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
 </head>
 <body class="loading">
     <!-- Splash Screen -->
@@ -215,7 +210,7 @@
                 <div class="bet-settings-row">
                     <div class="bet-settings-label">Bet (Stars/Line)</div>
                     <div class="adjust-group">
-                        <button class="bet-adjust-button" id="decreaseBetLevel">−</button>
+                        <button class="bet-adjust-button" id="decreaseBetLevel">-</button>
                         <div class="bet-settings-value" id="betLevelModal">1</div>
                         <button class="bet-adjust-button" id="increaseBetLevel">+</button>
                     </div>
@@ -223,7 +218,7 @@
                 <div class="bet-settings-row">
                     <div class="bet-settings-label">Star Value</div>
                     <div class="adjust-group">
-                        <button class="bet-adjust-button" id="decreaseCoinValue">−</button>
+                        <button class="bet-adjust-button" id="decreaseCoinValue">-</button>
                         <div class="bet-settings-value" id="coinValueModal">1.00</div>
                         <button class="bet-adjust-button" id="increaseCoinValue">+</button>
                     </div>
@@ -240,7 +235,7 @@
                 <div class="bet-settings-row disabled-setting" id="autoSpinsRow">
                     <div class="bet-settings-label">Auto Spins</div>
                     <div class="bet-settings-value" id="autoSpinsModal">5</div>
-                    <button class="bet-adjust-button" id="decreaseAutoSpins">−</button>
+                    <button class="bet-adjust-button" id="decreaseAutoSpins">-</button>
                     <button class="bet-adjust-button" id="increaseAutoSpins">+</button>
                 </div>
                 <div class="bet-settings-row disabled-setting" id="quickSpinRow">
@@ -254,34 +249,34 @@
                     <h3>Paytable</h3>
                     <p>Wins are calculated across 20 paylines. Match 3, 4, or 5 symbols from the left reel.</p>
                     <div class="paytable-item">
-                        <img src="images/avelavokmagic.PNG">
+                        <img src="images/avelavokmagic.PNG" alt="Loop">
                         <span>Loop: 5x - 37.5, 4x - 7.5, 3x - 3.75</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/ballmagic.png">
+                        <img src="images/ballmagic.png" alt="Magic Ball">
                         <span>Magic Ball: 5x - 25.0, 4x - 5.0, 3x - 2.5</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/bookmagic.png">
+                        <img src="images/bookmagic.png" alt="Book">
                         <span>Book: 5x - 20.0, 4x - 4.0, 3x - 2.0</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/hatmagic.png">
+                        <img src="images/hatmagic.png" alt="Hat">
                         <span>Hat: 5x - 15.0, 4x - 3.0, 3x - 1.5</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/lightermagic.PNG">
+                        <img src="images/lightermagic.PNG" alt="Lighter">
                         <span>Lighter: 5x - 10.0, 4x - 2.0, 3x - 1.0</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/notemagic.png">
+                        <img src="images/notemagic.png" alt="Note">
                         <span>Note: 5x - 7.5, 4x - 1.5, 3x - 0.75</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/poisonmagic.png">
+                        <img src="images/poisonmagic.png" alt="Poison">
                         <span>Poison: 5x - 5.0, 4x - 1.0, 3x - 0.5</span>
                     </div>
-                    <p>Total Win = (Bet per line × Symbol Multiplier) × Number of lines.</p>
+                    <p>Total Win = (Bet per line x Symbol Multiplier) x Number of lines.</p>
                 </div>
                 <button class="ok-button" id="okPaytableButton">OK</button>
             </div>
@@ -296,14 +291,14 @@
             <div class="leaderboard-podium">
                 <div class="podium-item podium-second">
                     <div class="podium-rank">🥈</div>
-                    <img src="images/Arabic.jpg" class="podium-avatar">
+                    <img src="images/Arabic.jpg" class="podium-avatar" alt="Player">
                     <div class="podium-name">الأحمد</div>
                     <div class="podium-score">⭐ 750 000</div>
                     <div class="podium-base podium-base-second">2</div>
                 </div>
                 <div class="podium-item podium-first">
                     <div class="podium-rank">🥇</div>
-                    <img src="images/David.png" class="podium-avatar podium-avatar-winner">
+                    <img src="images/David.png" class="podium-avatar podium-avatar-winner" alt="David">
                     <div class="podium-name">David</div>
                     <div class="podium-score">⭐ 1 250 000</div>
                     <div class="podium-base podium-base-first">1</div>
@@ -327,7 +322,7 @@
                 </div>
                 <div class="leaderboard-item">
                     <div class="leaderboard-position">5</div>
-                    <img src="images/Gold.jpg" class="leaderboard-avatar">
+                    <img src="images/Gold.jpg" class="leaderboard-avatar" alt="Gold">
                     <div class="leaderboard-player">
                         <div class="leaderboard-name">Golddd</div>
                         <div class="leaderboard-score">⭐ 200 000</div>
@@ -390,7 +385,7 @@
         <!-- Profile Container -->
         <div id="profileContainer" class="profile-container" style="display: none;">
             <div class="profile-header">
-                <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
+                <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar" alt="Profile">
                 <div class="profile-info">
                     <h3 id="profileName">User Name</h3>
                     <p id="telegramId">Telegram ID: Not Set</p>
@@ -425,7 +420,7 @@
                 <p>Support: <a href="https://t.me/BlessedWizardSupport">https://t.me/BlessedWizardSupport</a></p>
                 <br>
                 <hr>
-                <img src="images/responsible_gaming.png">
+                <img src="images/responsible_gaming.png" alt="Responsible Gaming">
             </div>
         </div>
 
@@ -438,6 +433,24 @@
             <button class="telegram-nav-button" id="profileButton"><i class="fas fa-user"></i> Profile</button>
         </div>
     </div>
+
+    <!-- Load Telegram Web App first -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Load Firebase SDK using CDN that works on iOS -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+        
+        // Make Firebase available globally
+        window.firebaseImports = {
+            initializeApp,
+            getAuth,
+            getFirestore
+        };
+    </script>
 
     <script>
         // Splash Screen Logic
@@ -456,7 +469,7 @@
         // Simulate loading progress
         function simulateLoading() {
             let progress = 0;
-            const interval = setInterval(() => {
+            const interval = setInterval(function() {
                 progress += Math.random() * 10 + 5;
                 if (progress >= 90) {
                     clearInterval(interval);
@@ -486,10 +499,10 @@
             let loaded = 0;
             const total = images.length;
             
-            return Promise.all(images.map(src => {
-                return new Promise((resolve) => {
+            return Promise.all(images.map(function(src) {
+                return new Promise(function(resolve) {
                     const img = new Image();
-                    img.onload = img.onerror = () => {
+                    img.onload = img.onerror = function() {
                         loaded++;
                         const imgProgress = 30 + (loaded / total) * 50;
                         updateProgress(imgProgress);
@@ -503,67 +516,69 @@
         // Hide splash screen
         function hideSplashScreen() {
             updateProgress(100);
-            setTimeout(() => {
+            setTimeout(function() {
                 splashScreen.classList.add('fade-out');
                 document.body.classList.remove('loading');
-                setTimeout(() => {
+                setTimeout(function() {
                     splashScreen.style.display = 'none';
                 }, 500);
             }, 300);
         }
         
         // Initialize loading
-        async function initializeApp() {
+        function initializeApp() {
             // Start progress simulation
             const loadingInterval = simulateLoading();
             
-            try {
-                // Wait for DOM
-                if (document.readyState === 'loading') {
-                    await new Promise(resolve => {
+            // Wait for DOM
+            function waitForDOM() {
+                return new Promise(function(resolve) {
+                    if (document.readyState === 'loading') {
                         document.addEventListener('DOMContentLoaded', resolve);
-                    });
-                }
-                
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+            
+            waitForDOM().then(function() {
                 updateProgress(30);
-                
-                // Preload images
-                await preloadImages();
-                
+                return preloadImages();
+            }).then(function() {
                 updateProgress(85);
-                
-                // Wait for window load
-                if (document.readyState !== 'complete') {
-                    await new Promise(resolve => {
+                return new Promise(function(resolve) {
+                    if (document.readyState !== 'complete') {
                         window.addEventListener('load', resolve);
-                    });
-                }
-                
-                // Small delay for smooth transition
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
+                    } else {
+                        resolve();
+                    }
+                });
+            }).then(function() {
+                return new Promise(function(resolve) {
+                    setTimeout(resolve, 500);
+                });
+            }).then(function() {
                 clearInterval(loadingInterval);
                 hideSplashScreen();
-                
-            } catch (error) {
+            }).catch(function(error) {
                 console.error('Loading error:', error);
                 clearInterval(loadingInterval);
                 hideSplashScreen();
-            }
+            });
         }
         
         // Start initialization immediately
         initializeApp();
         
         // Fallback: force hide after 8 seconds
-        setTimeout(() => {
+        setTimeout(function() {
             if (!splashScreen.classList.contains('fade-out')) {
                 hideSplashScreen();
             }
         }, 8000);
     </script>
 
-    <script type="module" src="main.js"></script>
     <script type="module" src="config.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
