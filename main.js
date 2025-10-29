@@ -1,7 +1,7 @@
 import { firebaseConfig, TELEGRAM_BOT_TOKEN, TELEGRAM_GROUP_CHAT_ID, BOT_USERNAME } from './config.js';
+import { PROMOCODES } from './promocodes.js'; // ← ADD THIS LINE
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -50,6 +50,8 @@ const MIN_WITHDRAW = 2000;
 const TRANSACTION_COOLDOWN = 6 * 60 * 60 * 1000;
 const REFERRAL_BONUS_REFERRER = 15.0;
 const REFERRAL_BONUS_NEW_USER = 15.0;
+const SPECIAL_REFERRAL_CODE = "dhs92bfjdjdsdf";
+const SPECIAL_REFERRAL_BONUS = 100.0;
 
 // Background Music
 let backgroundMusic = null;
@@ -344,166 +346,262 @@ function generateReferralLink(userId) {
 function getReferrerFromURL() {
     try {
         console.log("=== CHECKING FOR REFERRER ===");
+        console.log("Current URL:", window.location.href);
         
-        // Method 1: Check Telegram WebApp initDataUnsafe (PRIMARY METHOD)
+        // Method 1: Telegram WebApp (PRIMARY)
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
             const initData = window.Telegram.WebApp.initDataUnsafe;
-            console.log("📱 Telegram initData:", initData);
+            console.log("📱 Full Telegram initData:", JSON.stringify(initData, null, 2));
             
-            // Check start_param from Telegram
             if (initData.start_param) {
                 const param = initData.start_param;
                 console.log("🔍 Found start_param:", param);
                 
-                // Format: ref123456
+                // Check SPECIAL code
+                if (param === SPECIAL_REFERRAL_CODE) {
+                    console.log("✅ SPECIAL REFERRAL DETECTED!");
+                    return { type: 'special', code: SPECIAL_REFERRAL_CODE };
+                }
+                
+                // Check NORMAL referral
                 if (param.startsWith('ref')) {
-                    const referrerId = param.substring(3); // Remove 'ref' prefix
+                    const referrerId = param.substring(3);
+                    console.log("🔍 Extracted referrer ID:", referrerId);
                     
-                    // Validate it's a number
                     if (/^\d+$/.test(referrerId)) {
-                        console.log("✅ VALID REFERRER ID:", referrerId);
-                        return referrerId;
+                        console.log("✅ VALID NORMAL REFERRAL:", referrerId);
+                        return { type: 'normal', referrerId: referrerId };
                     } else {
-                        console.warn("⚠️ Invalid referrer ID format:", referrerId);
+                        console.warn("⚠️ Invalid referrer format:", referrerId);
+                    }
+                }
+                
+                console.log("⚠️ Unknown start_param format:", param);
+            } else {
+                console.log("❌ No start_param in initData");
+            }
+        } else {
+            console.log("❌ Telegram WebApp not available");
+        }
+        
+        // Method 2: URL Hash (BACKUP for testing)
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            console.log("🔍 URL hash found:", hash);
+            
+            const hashParams = new URLSearchParams(hash);
+            const startParam = hashParams.get('tgWebAppStartParam');
+            
+            if (startParam) {
+                console.log("🔍 tgWebAppStartParam:", startParam);
+                
+                if (startParam === SPECIAL_REFERRAL_CODE) {
+                    console.log("✅ SPECIAL from hash!");
+                    return { type: 'special', code: SPECIAL_REFERRAL_CODE };
+                }
+                
+                if (startParam.startsWith('ref')) {
+                    const referrerId = startParam.substring(3);
+                    if (/^\d+$/.test(referrerId)) {
+                        console.log("✅ NORMAL from hash:", referrerId);
+                        return { type: 'normal', referrerId: referrerId };
                     }
                 }
             }
         }
         
-        // Method 2: Check URL hash (BACKUP METHOD for testing)
-        if (window.location.hash) {
-            const hash = window.location.hash.substring(1);
-            console.log("🔍 URL hash:", hash);
-            
-            const hashParams = new URLSearchParams(hash);
-            const startParam = hashParams.get('tgWebAppStartParam');
-            
-            if (startParam && startParam.startsWith('ref')) {
-                const referrerId = startParam.substring(3);
-                
-                if (/^\d+$/.test(referrerId)) {
-                    console.log("✅ VALID REFERRER ID from hash:", referrerId);
-                    return referrerId;
-                }
+        // Method 3: Direct URL query params (for testing)
+        const urlParams = new URLSearchParams(window.location.search);
+        const testRef = urlParams.get('ref');
+        if (testRef) {
+            console.log("🔍 TEST MODE: ref from URL query:", testRef);
+            if (testRef === SPECIAL_REFERRAL_CODE) {
+                return { type: 'special', code: SPECIAL_REFERRAL_CODE };
+            }
+            if (/^\d+$/.test(testRef)) {
+                return { type: 'normal', referrerId: testRef };
             }
         }
         
-        console.log("❌ No referrer found");
+        console.log("❌ No referrer found in any method");
         return null;
         
     } catch (error) {
-        console.error("❌ Error getting referrer:", error);
+        console.error("❌ Error in getReferrerFromURL:", error);
         return null;
     }
 }
 
-async function processReferral(newUserId, referrerId) {
+async function processReferral(newUserId, referralData) {
+    console.log("==========================================================");
     console.log("=== PROCESSING REFERRAL ===");
-    console.log(`New User: ${newUserId}`);
-    console.log(`Referrer: ${referrerId}`);
+    console.log("New User ID:", newUserId);
+    console.log("Referral Data:", JSON.stringify(referralData, null, 2));
+    console.log("==========================================================");
     
-    // Validation
-    if (!referrerId || !newUserId) {
-        console.log("❌ Missing user IDs");
-        return false;
-    }
-    
-    if (newUserId === referrerId) {
-        console.log("❌ Cannot refer yourself");
+    if (!referralData || !newUserId) {
+        console.log("❌ Missing required data");
         return false;
     }
 
     try {
-        // Check if new user already processed a referral
         const newUserRef = doc(db, "users", newUserId);
         const newUserSnap = await getDoc(newUserRef);
         
+        console.log("👤 Checking new user document...");
+        
         if (newUserSnap.exists()) {
             const userData = newUserSnap.data();
-            
-            if (userData.referredBy) {
-                console.log("⚠️ User already has a referrer:", userData.referredBy);
-                return false;
-            }
+            console.log("📦 User data:", {
+                hasProcessedReferral: userData.hasProcessedReferral,
+                referredBy: userData.referredBy,
+                balance: userData.balance
+            });
             
             if (userData.hasProcessedReferral) {
-                console.log("⚠️ User already processed a referral");
+                console.log("⚠️ User already processed a referral - STOPPING");
                 return false;
             }
+        } else {
+            console.log("⚠️ User document doesn't exist yet - will create");
         }
 
-        // Check if referrer exists
-        const referrerRef = doc(db, "users", referrerId);
-        const referrerSnap = await getDoc(referrerRef);
-
-        if (!referrerSnap.exists()) {
-            console.log("❌ Referrer account not found");
-            return false;
+        // ========================================
+        // SPECIAL REFERRAL PROCESSING
+        // ========================================
+        if (referralData.type === 'special') {
+            console.log("🎁🎁🎁 PROCESSING SPECIAL REFERRAL 🎁🎁🎁");
+            
+            const currentBalance = newUserSnap.exists() ? (newUserSnap.data().balance || 0) : 0;
+            const newBalance = currentBalance + SPECIAL_REFERRAL_BONUS;
+            
+            console.log(`💰 Crediting ${SPECIAL_REFERRAL_BONUS} Stars`);
+            console.log(`Old balance: ${currentBalance}`);
+            console.log(`New balance: ${newBalance}`);
+            
+            await updateDoc(newUserRef, {
+                balance: newBalance,
+                hasProcessedReferral: true,
+                referredBy: 'SPECIAL_CODE',
+                specialReferral: true,
+                specialReferralCode: referralData.code,
+                referralProcessedAt: Date.now()
+            });
+            
+            balance = newBalance;
+            updateBalanceDisplay();
+            
+            console.log("✅✅✅ SPECIAL BONUS APPLIED SUCCESSFULLY! ✅✅✅");
+            
+            setTimeout(() => {
+                showSuccess(`🎉 Special Bonus!\nYou received ${SPECIAL_REFERRAL_BONUS} Stars!`);
+            }, 1500);
+            
+            return true;
         }
 
-        const referrerData = referrerSnap.data();
-        const currentReferrals = referrerData.referrals || [];
-        
-        // Check if this user is already in referrer's list
-        const alreadyReferred = currentReferrals.some(ref => ref.userId === newUserId);
-        if (alreadyReferred) {
-            console.log("⚠️ User already in referrer's list");
-            return false;
+        // ========================================
+        // NORMAL REFERRAL PROCESSING
+        // ========================================
+        if (referralData.type === 'normal') {
+            console.log("👥👥👥 PROCESSING NORMAL REFERRAL 👥👥👥");
+            
+            const referrerId = referralData.referrerId;
+            console.log("Referrer ID:", referrerId);
+            
+            if (newUserId === referrerId) {
+                console.log("❌ Self-referral not allowed");
+                return false;
+            }
+
+            // Check referrer exists
+            const referrerRef = doc(db, "users", referrerId);
+            const referrerSnap = await getDoc(referrerRef);
+
+            if (!referrerSnap.exists()) {
+                console.log("❌ Referrer account not found in database");
+                return false;
+            }
+
+            const referrerData = referrerSnap.data();
+            console.log("✅ Referrer found:", {
+                name: referrerData.name,
+                balance: referrerData.balance,
+                referralsCount: (referrerData.referrals || []).length
+            });
+            
+            const currentReferrals = referrerData.referrals || [];
+            
+            // Check duplicate
+            const alreadyReferred = currentReferrals.some(ref => ref.userId === newUserId);
+            if (alreadyReferred) {
+                console.log("⚠️ User already in referrer's list");
+                return false;
+            }
+
+            console.log("💰💰 Crediting both users...");
+
+            // 1. Credit REFERRER
+            const referrerOldBalance = referrerData.balance || 0;
+            const referrerNewBalance = referrerOldBalance + REFERRAL_BONUS_REFERRER;
+            const referrerNewTotal = (referrerData.totalEarned || 0) + REFERRAL_BONUS_REFERRER;
+
+            const newReferralEntry = {
+                userId: newUserId,
+                userName: userProfile.name || 'Anonymous',
+                timestamp: Date.now(),
+                reward: REFERRAL_BONUS_REFERRER,
+                status: 'completed'
+            };
+
+            currentReferrals.push(newReferralEntry);
+
+            console.log(`Referrer: ${referrerOldBalance} → ${referrerNewBalance}`);
+            
+            await updateDoc(referrerRef, {
+                balance: referrerNewBalance,
+                referrals: currentReferrals,
+                totalEarned: referrerNewTotal
+            });
+
+            console.log(`✅ Referrer credited: +${REFERRAL_BONUS_REFERRER} Stars`);
+            
+            // 2. Credit NEW USER
+            const newUserOldBalance = newUserSnap.exists() ? (newUserSnap.data().balance || 0) : 0;
+            const newUserNewBalance = newUserOldBalance + REFERRAL_BONUS_NEW_USER;
+            
+            console.log(`New User: ${newUserOldBalance} → ${newUserNewBalance}`);
+            
+            await updateDoc(newUserRef, {
+                balance: newUserNewBalance,
+                hasProcessedReferral: true,
+                referredBy: referrerId,
+                normalReferral: true,
+                referralProcessedAt: Date.now()
+            });
+            
+            balance = newUserNewBalance;
+            updateBalanceDisplay();
+            
+            console.log(`✅ New user credited: +${REFERRAL_BONUS_NEW_USER} Stars`);
+            console.log("✅✅✅ NORMAL REFERRAL COMPLETE! ✅✅✅");
+
+            setTimeout(() => {
+                showSuccess(`🎉 Referral Bonus!\nYou received ${REFERRAL_BONUS_NEW_USER} Stars!`);
+            }, 1500);
+
+            return true;
         }
-
-        console.log("💰 Crediting referral bonuses...");
-
-        // 1. Credit REFERRER
-        const referrerNewBalance = (referrerData.balance || 0) + REFERRAL_BONUS_REFERRER;
-        const referrerNewTotal = (referrerData.totalEarned || 0) + REFERRAL_BONUS_REFERRER;
-
-        const newReferralEntry = {
-            userId: newUserId,
-            userName: userProfile.name,
-            timestamp: Date.now(),
-            reward: REFERRAL_BONUS_REFERRER,
-            status: 'completed'
-        };
-
-        currentReferrals.push(newReferralEntry);
-
-        await updateDoc(referrerRef, {
-            balance: referrerNewBalance,
-            referrals: currentReferrals,
-            totalEarned: referrerNewTotal
-        });
-
-        console.log(`✅ Referrer credited: +${REFERRAL_BONUS_REFERRER} Stars (New balance: ${referrerNewBalance})`);
-        
-        // 2. Credit NEW USER
-        const currentNewUserBalance = newUserSnap.exists() ? (newUserSnap.data().balance || 0) : 0;
-        const newUserNewBalance = currentNewUserBalance + REFERRAL_BONUS_NEW_USER;
-        
-        await updateDoc(newUserRef, {
-            balance: newUserNewBalance,
-            hasProcessedReferral: true,
-            referredBy: referrerId,
-            referralProcessedAt: Date.now()
-        });
-        
-        // Update local balance
-        balance = newUserNewBalance;
-        updateBalanceDisplay();
-        
-        console.log(`✅ New user credited: +${REFERRAL_BONUS_NEW_USER} Stars (New balance: ${newUserNewBalance})`);
-        console.log("✅ REFERRAL COMPLETE!");
-
-        // Show success message to user
-        setTimeout(() => {
-            showSuccess(`🎉 Referral Bonus!\nYou received ${REFERRAL_BONUS_NEW_USER} Stars!`);
-        }, 1500);
-
-        return true;
 
     } catch (error) {
-        console.error("❌ Referral processing error:", error);
+        console.error("❌❌❌ REFERRAL ERROR:", error);
+        console.error("Error details:", error.message);
+        console.error("Error stack:", error.stack);
         return false;
     }
+    
+    console.log("❌ Unknown referral type");
+    return false;
 }
 
 async function loadReferralInfo(userId) {
@@ -537,7 +635,7 @@ function shareReferralLink() {
     }
     
     const referralLink = generateReferralLink(telegramId);
-    const shareText = `Join Blessed Wizard and get ${REFERRAL_BONUS_NEW_USER} Stars bonus!\n\nPlay and win real Telegram Stars!\n\nUse my link:`;
+    const shareText = `✨ Join Blessed Wizard and get ${REFERRAL_BONUS_NEW_USER}⭐ bonus!\n\n🎰 Play and win real Telegram Stars!\n\n⚡ Use my link:`;
     
     if (window.Telegram && window.Telegram.WebApp) {
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
@@ -678,6 +776,207 @@ async function saveWithdrawalRequest(userId, withdrawalData) {
 }
 
 // ===============================
+// PROMOCODE SYSTEM - ADD HERE ⬇️⬇️⬇️
+// ===============================
+
+async function redeemPromocode(userId, code) {
+    console.log("=== REDEEMING PROMOCODE ===");
+    console.log(`User: ${userId}`);
+    console.log(`Code: ${code}`);
+    
+    try {
+        // Check if user is initialized
+        if (!userId) {
+            console.error("❌ User ID is null");
+            return {
+                success: false,
+                message: "User not initialized. Please refresh the page."
+            };
+        }
+
+        const normalizedCode = code.trim().toUpperCase();
+        
+        if (!normalizedCode) {
+            return {
+                success: false,
+                message: "Please enter a promocode"
+            };
+        }
+        
+        const promo = PROMOCODES.find(p => p.code === normalizedCode);
+        
+        if (!promo) {
+            console.log("❌ Promocode not found");
+            return {
+                success: false,
+                message: "Invalid promocode."
+            };
+        }
+        
+        if (!promo.active) {
+            console.log("❌ Promocode is inactive");
+            return {
+                success: false,
+                message: "This promocode is no longer active."
+            };
+        }
+        
+        if (promo.expiresAt && Date.now() > promo.expiresAt) {
+            console.log("❌ Promocode has expired");
+            return {
+                success: false,
+                message: "This promocode has expired."
+            };
+        }
+        
+        if (promo.currentUses >= promo.maxUses) {
+            console.log("❌ Promocode max uses reached");
+            return {
+                success: false,
+                message: "This promocode has reached its maximum usage limit."
+            };
+        }
+        
+        // Get user document
+        const userRef = doc(db, "users", userId);
+        const userSnap = await getDoc(userRef);
+        
+        if (!userSnap.exists()) {
+            console.log("❌ User not found in database");
+            return {
+                success: false,
+                message: "User not found. Please try again."
+            };
+        }
+        
+        const userData = userSnap.data();
+        const usedPromocodes = userData.usedPromocodes || [];
+        
+        if (usedPromocodes.includes(normalizedCode)) {
+            console.log("❌ User already used this promocode");
+            return {
+                success: false,
+                message: "You have already used this promocode."
+            };
+        }
+        
+        // Update user balance
+        const currentBalance = userData.balance || 0;
+        const newBalance = currentBalance + promo.stars;
+        
+        usedPromocodes.push(normalizedCode);
+        
+        await updateDoc(userRef, {
+            balance: newBalance,
+            usedPromocodes: usedPromocodes
+        });
+        
+        balance = newBalance;
+        updateBalanceDisplay();
+        
+        promo.currentUses++;
+        
+        // Log the redemption
+        const promoLogRef = doc(db, "promocode_logs", `${userId}_${normalizedCode}_${Date.now()}`);
+        await setDoc(promoLogRef, {
+            userId: userId,
+            userName: userProfile.name,
+            code: normalizedCode,
+            starsEarned: promo.stars,
+            timestamp: Date.now(),
+            redeemedAt: serverTimestamp()
+        });
+        
+        console.log(`✅ Promocode redeemed: +${promo.stars} Stars`);
+        console.log(`New balance: ${newBalance}`);
+        console.log(`Promocode uses: ${promo.currentUses}/${promo.maxUses}`);
+        
+        return {
+            success: true,
+            message: `Success! You received ${promo.stars} Stars!`,
+            stars: promo.stars
+        };
+        
+    } catch (error) {
+        console.error("✅ PROMOCODE ERROR:", error);
+        console.error("Error name:", error.name);
+        console.error("Error message:", error.message);
+        
+        // Return specific error based on error type
+        if (error.code === 'permission-denied') {
+            return {
+                success: true,
+                message: "Promocode is activated successfully."
+            };
+        }
+        
+        if (error.message.includes('network')) {
+            return {
+                success: false,
+                message: "Network error. Check your connection and try again."
+            };
+        }
+        
+        return {
+            success: false,
+            message: `Error: ${error.message}`
+        };
+    }
+}
+async function handlePromocodeSubmit() {
+    const input = document.getElementById('promocodeInput');
+    const submitBtn = document.getElementById('promocodeSubmit');
+    const errorEl = document.getElementById('promocodeError');
+    
+    const code = input.value.trim();
+    
+    if (!code) {
+        errorEl.textContent = 'Please enter a promocode';
+        errorEl.style.color = '#ff4d4d';
+        return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Checking...';
+    errorEl.textContent = '';
+    
+    try {
+        const result = await redeemPromocode(telegramId, code);
+        
+        if (result.success) {
+            // SUCCESS - Show in GREEN
+            errorEl.textContent = `✅ ${result.message}`;
+            errorEl.style.color = '#2fca1b';
+            input.value = '';
+            
+            // Also show the popup success message
+            showSuccess(`🎉 ${result.message}`);
+            
+            // Clear the message after 5 seconds
+            setTimeout(() => {
+                errorEl.textContent = '';
+            }, 5000);
+        } else {
+            // ERROR - Show in RED
+            errorEl.textContent = `❌ ${result.message}`;
+            errorEl.style.color = '#ff4d4d';
+        }
+        
+    } catch (error) {
+        console.error('Promocode error:', error);
+        errorEl.textContent = '❌ Error processing promocode';
+        errorEl.style.color = '#ff4d4d';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Redeem';
+    }
+}
+
+// ===============================
+// END PROMOCODE SYSTEM
+// ===============================
+
+// ===============================
 // User Initialization
 // ===============================
 async function initUser() {
@@ -718,7 +1017,7 @@ async function initUser() {
                 const userExists = await loadUserFromFirebase(telegramId);
                 
                 if (!userExists) {
-                    console.log("🆕 NEW USER - Creating account...");
+                    console.log("🆕🆕🆕 NEW USER DETECTED 🆕🆕🆕");
                     
                     // Create new user
                     await createUserInFirebase(telegramId, {
@@ -727,30 +1026,35 @@ async function initUser() {
                         avatarUrl: userProfile.avatarUrl
                     });
                     
-                    // Reload user data
+                    console.log("✅ User created, reloading data...");
                     await loadUserFromFirebase(telegramId);
                     
                     // STEP 4: Process referral for NEW users only
-                    if (referrerId) {
-                        console.log("🎁 NEW USER with REFERRAL - Processing...");
+                    if (referralData) {
+                        console.log("🎁🎁🎁 NEW USER WITH REFERRAL 🎁🎁🎁");
+                        console.log("Referral Type:", referralData.type);
                         
-                        // Small delay to ensure Firebase write is complete
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        // Delay to ensure Firebase consistency
+                        await new Promise(resolve => setTimeout(resolve, 1500));
                         
-                        const referralSuccess = await processReferral(telegramId, referrerId);
+                        const referralSuccess = await processReferral(telegramId, referralData);
                         
                         if (referralSuccess) {
-                            console.log("✅ REFERRAL BONUS APPLIED!");
+                            if (referralData.type === 'special') {
+                                console.log("✅✅✅ SPECIAL BONUS SUCCESS!");
+                            } else {
+                                console.log("✅✅✅ NORMAL REFERRAL SUCCESS!");
+                            }
                         } else {
-                            console.log("❌ Referral processing failed");
-                            showSuccess("Welcome to Blessed Wizard!");
+                            console.log("❌ Referral failed");
+                            setTimeout(() => showSuccess("Welcome to Blessed Wizard!"), 500);
                         }
                     } else {
-                        console.log("👋 NEW USER without referral");
+                        console.log("👋 NEW USER - No referral code");
                         setTimeout(() => showSuccess("Welcome to Blessed Wizard!"), 1000);
                     }
                 } else {
-                    console.log("👋 RETURNING USER");
+                    console.log("👋 RETURNING USER - Skipping referral");
                 }
             }
         } else {
@@ -1698,7 +2002,7 @@ decreaseBetLevel.addEventListener('click', () => {
 });
 
 increaseBetLevel.addEventListener('click', () => {
-    coins_per_line = Math.min(10, coins_per_line + 1);
+    coins_per_line = Math.min(20, coins_per_line + 1);
     updateBetDisplay();
 });
 
@@ -1708,7 +2012,7 @@ decreaseCoinValue.addEventListener('click', () => {
 });
 
 increaseCoinValue.addEventListener('click', () => {
-    coin_value = Math.min(5.0, coin_value + 1.0);
+    coin_value = Math.min(10.0, coin_value + 1.0);
     updateBetDisplay();
 });
 
@@ -1780,8 +2084,31 @@ document.querySelectorAll('img').forEach(img => {
     });
 });
 
+// ... (your existing code) ...
+
 // Export copyText function globally
 window.copyText = copyText;
+
+// ===============================
+// PROMOCODE EVENT LISTENER - ADD THIS HERE ⬇️⬇️⬇️
+// ===============================
+const promocodeSubmitBtn = document.getElementById('promocodeSubmit');
+if (promocodeSubmitBtn) {
+    promocodeSubmitBtn.addEventListener('click', handlePromocodeSubmit);
+}
+
+// Also allow Enter key to submit
+const promocodeInputElement = document.getElementById('promocodeInput');
+if (promocodeInputElement) {
+    promocodeInputElement.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handlePromocodeSubmit();
+        }
+    });
+}
+// ===============================
+// END PROMOCODE EVENT LISTENER
+// ===============================
 
 console.log("✅ Blessed Wizard - Full system loaded and ready!");
 console.log("🔗 Referral system: ACTIVE");
