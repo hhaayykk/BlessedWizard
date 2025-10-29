@@ -12,7 +12,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0d0e12;
+            background: (#0d0e12);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -64,7 +64,7 @@
 
         .loading-bar {
             height: 100%;
-            background: linear-gradient(90deg, #f0c05a, #d4a855);
+            background: linear-gradient(90deg, #f0c05a);
             background-size: 200% 100%;
             animation: loading 2s linear infinite, shimmer 1.5s ease-in-out infinite;
             border-radius: 10px;
@@ -101,15 +101,15 @@
             display: none;
         }
         
-        /* Ensure consistent display for main content */
-        #mainContent {
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* Ensure consistent display for main content */
+#mainContent {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
         
         /* Show active container */
         .casino-container.active,
@@ -128,29 +128,17 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="loading">
-    <!-- Splash Screen -->
-    <div id="splashScreen">
-        <img src="images/splash.png" alt="Blessed Wizard" class="splash-logo" id="splashLogo">
-        <div class="loading-text">Loading Blessed Wizard ...</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar" id="loadingBar"></div>
-        </div>
-        <div class="loading-percentage" id="loadingPercentage">0%</div>
+<body>
+    <!-- Unified Page Header -->
+    <div class="page-header">
+        <img src="images/logo 1.png" alt="Blessed Wizard" class="logo">
+        <div class="wallet-balance" id="currentBalance">⭐ 0</div>
     </div>
 
-    <!-- Main Content -->
-    <div id="mainContent">
-        <!-- Unified Page Header -->
-        <div class="page-header">
-            <img src="images/logo 1.png" alt="Blessed Wizard" class="logo">
-            <div class="wallet-balance" id="currentBalance">⭐ 0</div>
-        </div>
-
-        <div id="dimmedOverlay" class="dimmed-overlay"></div>
-        <div id="resultOverlay" class="result-overlay">
-            <span id="resultText" class="result-text"></span>
-        </div>
+    <div id="dimmedOverlay" class="dimmed-overlay"></div>
+    <div id="resultOverlay" class="result-overlay">
+        <span id="resultText" class="result-text"></span>
+    </div>
 
         <!-- Game Container -->
         <div id="gameContainer" class="casino-container">
@@ -210,7 +198,7 @@
                 <div class="bet-settings-row">
                     <div class="bet-settings-label">Bet (Stars/Line)</div>
                     <div class="adjust-group">
-                        <button class="bet-adjust-button" id="decreaseBetLevel">-</button>
+                        <button class="bet-adjust-button" id="decreaseBetLevel">−</button>
                         <div class="bet-settings-value" id="betLevelModal">1</div>
                         <button class="bet-adjust-button" id="increaseBetLevel">+</button>
                     </div>
@@ -218,7 +206,7 @@
                 <div class="bet-settings-row">
                     <div class="bet-settings-label">Star Value</div>
                     <div class="adjust-group">
-                        <button class="bet-adjust-button" id="decreaseCoinValue">-</button>
+                        <button class="bet-adjust-button" id="decreaseCoinValue">−</button>
                         <div class="bet-settings-value" id="coinValueModal">1.00</div>
                         <button class="bet-adjust-button" id="increaseCoinValue">+</button>
                     </div>
@@ -235,7 +223,7 @@
                 <div class="bet-settings-row disabled-setting" id="autoSpinsRow">
                     <div class="bet-settings-label">Auto Spins</div>
                     <div class="bet-settings-value" id="autoSpinsModal">5</div>
-                    <button class="bet-adjust-button" id="decreaseAutoSpins">-</button>
+                    <button class="bet-adjust-button" id="decreaseAutoSpins">−</button>
                     <button class="bet-adjust-button" id="increaseAutoSpins">+</button>
                 </div>
                 <div class="bet-settings-row disabled-setting" id="quickSpinRow">
@@ -249,34 +237,34 @@
                     <h3>Paytable</h3>
                     <p>Wins are calculated across 20 paylines. Match 3, 4, or 5 symbols from the left reel.</p>
                     <div class="paytable-item">
-                        <img src="images/avelavokmagic.PNG" alt="Loop">
+                        <img src="images/avelavokmagic.PNG">
                         <span>Loop: 5x - 37.5, 4x - 7.5, 3x - 3.75</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/ballmagic.png" alt="Magic Ball">
+                        <img src="images/ballmagic.png">
                         <span>Magic Ball: 5x - 25.0, 4x - 5.0, 3x - 2.5</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/bookmagic.png" alt="Book">
+                        <img src="images/bookmagic.png">
                         <span>Book: 5x - 20.0, 4x - 4.0, 3x - 2.0</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/hatmagic.png" alt="Hat">
+                        <img src="images/hatmagic.png">
                         <span>Hat: 5x - 15.0, 4x - 3.0, 3x - 1.5</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/lightermagic.PNG" alt="Lighter">
+                        <img src="images/lightermagic.PNG">
                         <span>Lighter: 5x - 10.0, 4x - 2.0, 3x - 1.0</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/notemagic.png" alt="Note">
+                        <img src="images/notemagic.png">
                         <span>Note: 5x - 7.5, 4x - 1.5, 3x - 0.75</span>
                     </div>
                     <div class="paytable-item">
-                        <img src="images/poisonmagic.png" alt="Poison">
+                        <img src="images/poisonmagic.png">
                         <span>Poison: 5x - 5.0, 4x - 1.0, 3x - 0.5</span>
                     </div>
-                    <p>Total Win = (Bet per line x Symbol Multiplier) x Number of lines.</p>
+                    <p>Total Win = (Bet per line × Symbol Multiplier) × Number of lines.</p>
                 </div>
                 <button class="ok-button" id="okPaytableButton">OK</button>
             </div>
@@ -291,14 +279,14 @@
             <div class="leaderboard-podium">
                 <div class="podium-item podium-second">
                     <div class="podium-rank">🥈</div>
-                    <img src="images/Arabic.jpg" class="podium-avatar" alt="Player">
+                    <img src="images/Arabic.jpg" class="podium-avatar">
                     <div class="podium-name">الأحمد</div>
                     <div class="podium-score">⭐ 750 000</div>
                     <div class="podium-base podium-base-second">2</div>
                 </div>
                 <div class="podium-item podium-first">
                     <div class="podium-rank">🥇</div>
-                    <img src="images/David.png" class="podium-avatar podium-avatar-winner" alt="David">
+                    <img src="images/David.png" class="podium-avatar podium-avatar-winner">
                     <div class="podium-name">David</div>
                     <div class="podium-score">⭐ 1 250 000</div>
                     <div class="podium-base podium-base-first">1</div>
@@ -322,7 +310,7 @@
                 </div>
                 <div class="leaderboard-item">
                     <div class="leaderboard-position">5</div>
-                    <img src="images/Gold.jpg" class="leaderboard-avatar" alt="Gold">
+                    <img src="images/Gold.jpg" class="leaderboard-avatar">
                     <div class="leaderboard-player">
                         <div class="leaderboard-name">Golddd</div>
                         <div class="leaderboard-score">⭐ 200 000</div>
@@ -335,57 +323,58 @@
             </div>
         </div>
 
-        <!-- Wallet Container -->
-        <div id="balanceContainer" class="balance-container" style="display: none;">
-            <div class="wallet-divider"></div>
-            <div class="deposit-withdraw-row">
-                <button class="deposit-btn active" id="depositButton">Deposit</button>
-                <button class="withdraw-btn" id="withdrawButton">Withdraw</button>
-            </div>
+    <!-- Wallet Container -->
+    <div id="balanceContainer" class="balance-container" style="display: none;">
+        <div class="wallet-divider"></div>
+        <div class="deposit-withdraw-row">
+            <button class="deposit-btn active" id="depositButton">Deposit</button>
+            <button class="withdraw-btn" id="withdrawButton">Withdraw</button>
         </div>
+        <!-- Content will be dynamically loaded -->
+    </div>
 
-        <!-- Friends Container -->
-        <div id="friendsContainer" class="friends-container" style="display: none;">
-            <div class="referral-header">
-                <h3 class="referral-title">Invite Friends</h3>
-                <div class="referral-subtitle">Earn 15 Stars per friend!</div>
+    <!-- Friends Container -->
+    <div id="friendsContainer" class="friends-container" style="display: none;">
+        <div class="referral-header">
+            <h3 class="referral-title">Invite Friends</h3>
+            <div class="referral-subtitle">Earn 15 Stars per friend!</div>
+        </div>
+        <div class="referral-stats">
+            <div class="referral-stat-box">
+                <div class="stat-number" id="friendsInvited">0</div>
+                <div class="stat-label">Friends Invited</div>
             </div>
-            <div class="referral-stats">
-                <div class="referral-stat-box">
-                    <div class="stat-number" id="friendsInvited">0</div>
-                    <div class="stat-label">Friends Invited</div>
-                </div>
-                <div class="referral-stat-box">
-                    <div class="stat-number" id="totalEarned"><span style="font-size: 15px;">⭐</span> 0</div>
-                    <div class="stat-label">Total Earned</div>
-                </div>
-            </div>
-            <div class="referral-link-section">
-                <div class="referral-link-title">Your Referral Link</div>
-                <div class="referral-link-container">
-                    <span class="referral-link-text" id="referralLink">https://t.me/BlessedWizardBot?start=ref_USER123</span>
-                    <i class="fa-solid fa-copy copy-icon" onclick="window.copyText(this, document.getElementById('referralLink').textContent)"></i>
-                </div>
-            </div>
-            <button class="share-button" id="shareButton"><i class="fas fa-share"></i> Share Link</button>
-            <div class="referral-info-box">
-                <i class="fas fa-info-circle"></i>
-                <div>
-                    <div class="referral-info-title">How it works:</div>
-                    <ul class="referral-info-list">
-                        <li>Share your unique referral link</li>
-                        <li>Friend registers using your link</li>
-                        <li>You get 15 Stars instantly!</li>
-                        <li>No limit on referrals</li>
-                    </ul>
-                </div>
+            <div class="referral-stat-box">
+                <div class="stat-number" id="totalEarned"><span style="font-size: 15px;">⭐</span> 0</div>
+                <div class="stat-label">Total Earned</div>
             </div>
         </div>
+        <div class="referral-link-section">
+            <div class="referral-link-title">Your Referral Link</div>
+            <div class="referral-link-container">
+                <span class="referral-link-text" id="referralLink">https://t.me/BessedWizardBot?start=ref_USER123</span>
+                <i class="fa-solid fa-copy copy-icon" onclick="window.copyText(this, document.getElementById('referralLink').textContent)"></i>
+            </div>
+        </div>
+        <button class="share-button" id="shareButton"><i class="fas fa-share"></i> Share Link</button>
+        <div class="referral-info-box">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <div class="referral-info-title">How it works:</div>
+                <ul class="referral-info-list">
+                    <li>Share your unique referral link</li>
+                    <li>Friend registers using your link</li>
+                    <li>You get 15 Stars instantly!</li>
+                    <li>No limit on referrals</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
         <!-- Profile Container -->
         <div id="profileContainer" class="profile-container" style="display: none;">
             <div class="profile-header">
-                <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar" alt="Profile">
+                <img src="images/default_avatar.png" class="profile-avatar" id="profileAvatar">
                 <div class="profile-info">
                     <h3 id="profileName">User Name</h3>
                     <p id="telegramId">Telegram ID: Not Set</p>
@@ -420,7 +409,7 @@
                 <p>Support: <a href="https://t.me/BlessedWizardSupport">https://t.me/BlessedWizardSupport</a></p>
                 <br>
                 <hr>
-                <img src="images/responsible_gaming.png" alt="Responsible Gaming">
+                <img src="images/responsible_gaming.png">
             </div>
         </div>
 
@@ -433,24 +422,6 @@
             <button class="telegram-nav-button" id="profileButton"><i class="fas fa-user"></i> Profile</button>
         </div>
     </div>
-
-    <!-- Load Telegram Web App first -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Load Firebase SDK using CDN that works on iOS -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-        
-        // Make Firebase available globally
-        window.firebaseImports = {
-            initializeApp,
-            getAuth,
-            getFirestore
-        };
-    </script>
 
     <script>
         // Splash Screen Logic
@@ -469,7 +440,7 @@
         // Simulate loading progress
         function simulateLoading() {
             let progress = 0;
-            const interval = setInterval(function() {
+            const interval = setInterval(() => {
                 progress += Math.random() * 10 + 5;
                 if (progress >= 90) {
                     clearInterval(interval);
@@ -499,10 +470,10 @@
             let loaded = 0;
             const total = images.length;
             
-            return Promise.all(images.map(function(src) {
-                return new Promise(function(resolve) {
+            return Promise.all(images.map(src => {
+                return new Promise((resolve) => {
                     const img = new Image();
-                    img.onload = img.onerror = function() {
+                    img.onload = img.onerror = () => {
                         loaded++;
                         const imgProgress = 30 + (loaded / total) * 50;
                         updateProgress(imgProgress);
@@ -516,62 +487,60 @@
         // Hide splash screen
         function hideSplashScreen() {
             updateProgress(100);
-            setTimeout(function() {
+            setTimeout(() => {
                 splashScreen.classList.add('fade-out');
                 document.body.classList.remove('loading');
-                setTimeout(function() {
+                setTimeout(() => {
                     splashScreen.style.display = 'none';
                 }, 500);
             }, 300);
         }
         
         // Initialize loading
-        function initializeApp() {
+        async function initializeApp() {
             // Start progress simulation
             const loadingInterval = simulateLoading();
             
-            // Wait for DOM
-            function waitForDOM() {
-                return new Promise(function(resolve) {
-                    if (document.readyState === 'loading') {
+            try {
+                // Wait for DOM
+                if (document.readyState === 'loading') {
+                    await new Promise(resolve => {
                         document.addEventListener('DOMContentLoaded', resolve);
-                    } else {
-                        resolve();
-                    }
-                });
-            }
-            
-            waitForDOM().then(function() {
+                    });
+                }
+                
                 updateProgress(30);
-                return preloadImages();
-            }).then(function() {
+                
+                // Preload images
+                await preloadImages();
+                
                 updateProgress(85);
-                return new Promise(function(resolve) {
-                    if (document.readyState !== 'complete') {
+                
+                // Wait for window load
+                if (document.readyState !== 'complete') {
+                    await new Promise(resolve => {
                         window.addEventListener('load', resolve);
-                    } else {
-                        resolve();
-                    }
-                });
-            }).then(function() {
-                return new Promise(function(resolve) {
-                    setTimeout(resolve, 500);
-                });
-            }).then(function() {
+                    });
+                }
+                
+                // Small delay for smooth transition
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
                 clearInterval(loadingInterval);
                 hideSplashScreen();
-            }).catch(function(error) {
+                
+            } catch (error) {
                 console.error('Loading error:', error);
                 clearInterval(loadingInterval);
                 hideSplashScreen();
-            });
+            }
         }
         
         // Start initialization immediately
         initializeApp();
         
         // Fallback: force hide after 8 seconds
-        setTimeout(function() {
+        setTimeout(() => {
             if (!splashScreen.classList.contains('fade-out')) {
                 hideSplashScreen();
             }
@@ -579,6 +548,5 @@
     </script>
 
     <script type="module" src="config.js"></script>
-    <script type="module" src="main.js"></script>
 </body>
 </html>
