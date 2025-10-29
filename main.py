@@ -40,7 +40,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     keyboard = [[
         InlineKeyboardButton(
-            "🎰 Spin the Lucky Reels! 🍀", 
+            "🎰 Spin the Wizard Slots!", 
             web_app=WebAppInfo(url=webapp_url)
         )
     ]]
@@ -55,8 +55,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     else:
         message = (
-            f"🧙 *Welcome to Lucky Wizard Slots, {user_name}!* \n\n"
-            "⭐️ Earn real Telegram Stars by spinning the reels!\n"
+            f"🧙 *Welcome to Blessed Wizard Slots, {user_name}!* \n\n"
+            "⭐️ Earn real Telegram Stars by spinning the slots!\n"
             "🔗 Invite friends and win extra rewards!\n\n"
             "👇 Start your lucky journey:"
         )
@@ -69,10 +69,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
-        "📜 *Lucky Wizard Guide* 💫\n\n"
+        "📜 *Blessed Wizard Guide* 💫\n\n"
         "🎰 *How to Play:*\n"
         "• Enter the slot realm\n"
-        "• Spin the reels with Stars\n"
+        "• Spin the slots with Stars\n"
         "• Win magical rewards!\n\n"
         "🔗 *Referral Bonus:*\n"
         "• Share your lucky link\n"

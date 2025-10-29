@@ -985,9 +985,9 @@ async function initUser() {
     console.log("==========================================================");
     
     try {
-        // STEP 1: Get referrer ID FIRST (before anything else)
-        const referrerId = getReferrerFromURL();
-        console.log("🔗 Referrer ID:", referrerId || "None");
+        // STEP 1: Get referrer data FIRST (before anything else)
+        const referralData = getReferrerFromURL(); // ← CHANGED: Store in referralData
+        console.log("🔗 Referral Data:", referralData || "None");
 
         // STEP 2: Initialize Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
@@ -1069,11 +1069,16 @@ async function initUser() {
         updateProfileDisplay();
         initializeGame();
         
+        // Load referral info for the referral page
+        if (telegramId) {
+            await loadReferralInfo(telegramId);
+        }
+        
         console.log("==========================================================");
         console.log("✅ USER INITIALIZATION COMPLETE");
         console.log(`User ID: ${telegramId}`);
         console.log(`Balance: ${balance}`);
-        console.log(`Referrer: ${referrerId || 'None'}`);
+        console.log(`Referral Data:`, referralData || 'None');
         console.log("==========================================================");
         
     } catch (error) {
