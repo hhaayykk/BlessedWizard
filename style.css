@@ -383,6 +383,7 @@ h2 {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 .promocode-input::placeholder {
