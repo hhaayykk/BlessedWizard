@@ -16,6 +16,14 @@ export const PROMOCODES = [
         expiresAt: null
     },
     {
+        code: "MALAYALAM300",
+        stars: 300,
+        maxUses: 999999,
+        currentUses: 0,
+        active: true,
+        expiresAt: null
+    },
+    {
         code: "INDONESIA30",
         stars: 30,
         maxUses: 999999,
