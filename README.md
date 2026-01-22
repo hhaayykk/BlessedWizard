@@ -1,130 +1,95 @@
-# 🧙‍♂️ Blessed Wizard — Telegram Web App Slot Machine Game
+# 🧙‍♂️ Blessed Wizard
 
-**Blessed Wizard** is a Telegram Mini App–based slot machine game featuring casino-style gameplay, referral rewards, promocodes, and cryptocurrency withdrawals. The project is built with modern web technologies and integrates Firebase for backend services and Telegram APIs for authentication, payments, and notifications.
+**Blessed Wizard** is a **Telegram Mini App slot machine game** combined with a **Python Telegram Bot** that launches the app, manages referrals, and processes payments.
 
-> ⚠️ **Disclaimer:** This project contains gambling-style mechanics. Ensure compliance with local laws and regulations before deployment. Intended for **18+ users only** and promotes responsible gaming.
-
----
-
-## 📌 Table of Contents
-
-- Overview  
-- Features  
-- Technology Stack  
-- Project Structure  
-- Installation  
-- Configuration  
-- Usage  
-- Deployment  
-- Security Notes  
-- Contributing  
-- License  
+⚠️ Gambling-style mechanics. **18+ only.** Ensure compliance with local laws and regulations.
 
 ---
 
-## 🎮 Overview
+## Overview
 
-Blessed Wizard is a magic-themed slot machine game designed specifically for Telegram Mini Apps. Players can spin reels, earn in-game currency (**Stars**), invite friends via referrals, redeem promocodes, and withdraw winnings to supported cryptocurrency networks.
-
-The game includes a configurable **RTP (Return to Player)** system, leaderboards, auto-spin features, and a Firebase-powered backend for secure storage of user data and transactions.
-
----
-
-## ✨ Features
-
-### Gameplay
-- 5-reel slot machine with 20 paylines  
-- Weighted symbol probabilities  
-- Dynamic win calculation engine  
-- Configurable RTP (default: 96%)  
-- Win tiers: small, medium, big, mega  
-- Loss-streak compensation logic  
-
-### User System
-- Telegram WebApp authentication  
-- Firebase-based user profiles and balances  
-- Monthly leaderboards  
-- Profile settings (language, music, preferences)  
-
-### Economy
-- In-game currency (Stars)  
-- Deposits via Telegram Stars  
-- Withdrawals to TON, BTC, ETH, USDT  
-- Withdrawal cooldowns and minimum limits  
-
-### Growth & Engagement
-- Referral system (standard & special referral codes)  
-- Promocode redemption system  
-- Auto-spin and quick-spin modes  
-- In-game paytable and modal dialogs  
-
-### Notifications
-- Telegram bot integration  
-- Automatic withdrawal requests sent to a Telegram group  
-
-### UI / UX
-- Mobile-first responsive design  
-- Optimized for Telegram Mini App environment  
-- Wizard / magic-themed visuals  
+- Telegram Mini App slot game
+- Entry via Telegram Bot (`/start`)
+- Referral system with bonuses
+- Telegram Stars deposits
+- Cryptocurrency withdrawals
+- Firebase backend
 
 ---
 
-## 🛠 Technology Stack
+## Features
 
-**Frontend:** HTML5, CSS3, JavaScript (ES6+)  
-**Backend:** Firebase Firestore  
-**Integrations:** Telegram WebApp API, Telegram Bot API  
-**Libraries:** Firebase SDK, Font Awesome  
-
----
-
-## 🚀 Installation
-
-```bash
-git clone https://github.com/hhaayykk/BlessedWizard
-cd blessed-wizard
-```
-
-No local dependencies required. All libraries are loaded via CDN.
+- 🎰 5 reels / 20 paylines
+- 📊 Configurable RTP (default 96%)
+- 🔗 Referral system (`/start ref<user_id>`)
+- 🎁 Promocodes & bonuses
+- 💰 Telegram Stars payments
+- 🔔 Withdrawal notifications via bot
+- 🌍 TON / BTC / ETH / USDT withdrawals
+- 📱 Mobile-first Mini App UI
 
 ---
 
-## ⚙️ Configuration
+## Architecture
 
-- Update Firebase credentials in `config.js`  
-- Configure RTP and referral logic in `main.js`  
-- Manage promocodes in `promocodes.js`  
+Telegram Bot (Python) → Telegram Mini App (Web) → Firebase Firestore
 
 ---
 
-## ▶️ Usage
+## Tech Stack
 
-- Open via Telegram bot  
-- Authenticate automatically  
-- Play slot machine  
-- Invite friends  
-- Redeem promocodes  
-- Deposit or withdraw funds  
+WebApp: HTML, CSS, JavaScript, Telegram WebApp API  
+Bot: Python 3, python-telegram-bot v20.7  
+Backend: Firebase Firestore  
 
 ---
 
-## 🌍 Deployment
+## Project Structure
 
-Host on GitHub Pages, Vercel, or Netlify.  
-Set Mini App URL via **@BotFather** using `/menu`.
-
----
-
-## 🔐 Security Notes
-
-- Do not commit real API keys  
-- Use environment variables  
-- Enable Firebase Authentication  
-- Apply withdrawal validation and limits  
+webapp/ — Mini App frontend  
+bot.py — Telegram bot  
+requirements.txt — Python dependencies  
+README.md  
 
 ---
 
-## 🤝 Contributing
+## Installation
 
-Fork the repository, create a branch, and submit a pull request.  
-For major changes, open an issue first.
+git clone https://github.com/hhaayykk/BlessedWizard  
+cd BlessedWizard  
+pip install -r requirements.txt  
+
+---
+
+## Configuration
+
+- config.js — Firebase credentials  
+- main.js — Game logic and RTP  
+- bot.py — Bot token and Mini App URL  
+
+---
+
+## Usage
+
+1. Open the Telegram bot  
+2. Run /start  
+3. Mini App launches  
+4. Play slot machine  
+5. Deposit via Telegram Stars  
+6. Withdraw winnings  
+
+---
+
+## Deployment
+
+- WebApp: Netlify / Vercel / GitHub Pages  
+- Bot: python bot.py  
+- Set Mini App URL via @BotFather  
+
+---
+
+## Security Notes
+
+- Never commit real API keys  
+- Validate withdrawals  
+- Apply limits and anti-abuse checks  
