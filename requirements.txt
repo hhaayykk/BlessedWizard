@@ -1,0 +1,7 @@
+# requirements.txt
+# Python requirements for Lucky Wizard / Blessed Wizard Telegram Bot
+
+python-telegram-bot==20.7
+
+# Optional (recommended)
+python-dotenv>=1.0.0
