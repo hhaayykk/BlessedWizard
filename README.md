@@ -81,7 +81,7 @@ The game includes a configurable **RTP (Return to Player)** system, leaderboards
 ## 🚀 Installation
 
 ```bash
-git clone [https://github.com/yourusername/blessed-wizard.git](https://github.com/hhaayykk/BlessedWizard/)
+git clone https://github.com/hhaayykk/BlessedWizard
 cd blessed-wizard
 ```
 
