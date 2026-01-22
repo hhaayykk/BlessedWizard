@@ -80,13 +80,16 @@ The game includes a configurable **RTP (Return to Player)** system, leaderboards
 
 ## 📁 Project Structure
 
-/images  
-/js  
-- main.js  
-- config.js  
-- promocodes.js  
-index.html  
-styles.css  
+/images
+
+.gitattributes
+README.md
+config.js
+index.html
+main.js
+promocodes.js
+spooky.m4a
+style.css
 
 ---
 
