@@ -55,9 +55,8 @@ README.md
 
 ## Installation
 
-git clone https://github.com/hhaayykk/BlessedWizard  
-cd BlessedWizard  
-pip install -r requirements.txt  
+git clone https://github.com/hhaayykk/BlessedWizard.git 
+cd BlessedWizard
 
 ---
 
