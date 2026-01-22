@@ -44,15 +44,6 @@ Backend: Firebase Firestore
 
 ---
 
-## Project Structure
-
-webapp/ — Mini App frontend  
-bot.py — Telegram bot  
-requirements.txt — Python dependencies  
-README.md  
-
----
-
 ## Installation
 
 git clone https://github.com/hhaayykk/BlessedWizard.git 
@@ -64,7 +55,7 @@ cd BlessedWizard
 
 - config.js — Firebase credentials  
 - main.js — Game logic and RTP  
-- bot.py — Bot token and Mini App URL  
+- main.py — Bot token and Mini App URL  
 
 ---
 
