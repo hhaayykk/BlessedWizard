@@ -51,6 +51,7 @@ Backend: Firebase Firestore
 ## Installation
 
 git clone https://github.com/hhaayykk/BlessedWizard.git 
+
 cd BlessedWizard
 
 ---
