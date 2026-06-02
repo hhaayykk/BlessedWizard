@@ -7,6 +7,7 @@
 ---
 
 Official website - [blessedwizard.site](https://www.blessedwizard.site)
+
 <img width="2091" height="899" alt="изображение" src="https://github.com/user-attachments/assets/15dc0eba-b6ed-4fb2-bb30-b863323a1a69" />
 
 
